@@ -11,6 +11,8 @@ namespace BackEnd
         [Required]
         public int Age { get; set; }
         [Required]
+        public string Picture { get; set; }
+        [Required]
         public string ShortIntro { get; set; }
         [Required]
         public string LongIntro { get; set; }

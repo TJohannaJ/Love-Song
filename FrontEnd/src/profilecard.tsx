@@ -4,23 +4,23 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { Profile } from './recommendations';
 
-export default function ProfileCard() {
+export default function ProfileCard(profile: Profile) {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
-        alt="green iguana"
-        height="140"
-        image="src/assets/iguana.jpg"
+        alt="Profile Picture"
+        height="200"
+        image={profile.picture}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          Lizard
+          {profile.name}, {profile.age}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
+          {profile.short_intro}
         </Typography>
       </CardContent>
       <CardActions>
