@@ -11,7 +11,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar'
-import ImgMediaCard from './recommendations';
+import ImgMediaCard from './profilecard';
+import { Recommendations } from './recommendations';
 
 const drawerWidth = 240;
 
@@ -23,7 +24,7 @@ interface Props {
   window?: () => Window;
 }
 
-export default function ResponsiveDrawer(props: Props) {
+export default function Menu(props: Props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
@@ -134,7 +135,7 @@ export default function ResponsiveDrawer(props: Props) {
         sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
       >
         <Toolbar />
-        <ImgMediaCard></ImgMediaCard>
+        <Recommendations></Recommendations>
       </Box>
     </Box>
   );
