@@ -11,7 +11,7 @@ namespace BackEnd
         [Required]
         public int Age { get; set; }
         [Required]
-        public string Picture { get; set; }
+        public byte[] Picture { get; set; }
         [Required]
         public string ShortIntro { get; set; }
         [Required]

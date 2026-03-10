@@ -13,7 +13,7 @@ export default function ProfileCard(profile: Profile) {
         component="img"
         alt="Profile Picture"
         height="200"
-        image={profile.picture}
+        image={`data:image\\png;base64,${profile.picture}`}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
