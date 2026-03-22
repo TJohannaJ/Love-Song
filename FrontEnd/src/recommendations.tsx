@@ -21,8 +21,8 @@ export interface Profile{
     name: string;
     age: number;
     picture: string;
-    short_intro : string;
-    long_intro : string;
+    shortIntro : string;
+    longIntro : string;
 }
 
 export function Recommendations() {

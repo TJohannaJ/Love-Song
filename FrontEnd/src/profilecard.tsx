@@ -4,11 +4,13 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import ButtonBase from '@mui/material/ButtonBase';
 import { Profile } from './recommendations';
 
 export default function ProfileCard(profile: Profile) {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <ButtonBase> 
+    <Card sx={{ width: 280, height: 400 }}>
       <CardMedia
         component="img"
         alt="Profile Picture"
@@ -19,8 +21,8 @@ export default function ProfileCard(profile: Profile) {
         <Typography gutterBottom variant="h5" component="div">
           {profile.name}, {profile.age}
         </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {profile.short_intro}
+        <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'justify' }}>
+          {profile.shortIntro}
         </Typography>
       </CardContent>
       <CardActions>
@@ -28,5 +30,6 @@ export default function ProfileCard(profile: Profile) {
         <Button size="small" sx={{ justifyContent: "flex-end" }}>Dislike</Button>
       </CardActions>
     </Card>
+    </ButtonBase>
   );
 }

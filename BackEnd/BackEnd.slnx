@@ -1,3 +1,14 @@
 <Solution>
-  <Project Path="BackEnd/BackEnd.csproj" />
+  <Folder Name="/Application/">
+    <Project Path="Backend.Application/Backend.Application.csproj" Id="849153f3-e895-4947-90fc-ff663a021633" />
+  </Folder>
+  <Folder Name="/Domain/">
+    <Project Path="DomainServices/Backend.Domain.csproj" Id="a0fcead4-b91e-490d-b5bc-b8dcb559d812" />
+  </Folder>
+  <Folder Name="/Infrastucture/">
+    <Project Path="Backend.DataAccess/Backend.Infrastructure.csproj" Id="f1fa9a8e-2e9f-49a9-9e64-be8d3bbac9f6" />
+  </Folder>
+  <Folder Name="/WebApi/">
+    <Project Path="WebApi/Backend.WebApi.csproj" />
+  </Folder>
 </Solution>
