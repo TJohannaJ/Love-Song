@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Backend.Domain.Entities
 {
-    internal class Like
+    public class Like
     {
     }
 }

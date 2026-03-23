@@ -4,10 +4,9 @@ using System.Text;
 
 namespace Backend.Domain.Entities
 {
-    public class Recommendation
-    {
-        
-        public Guid Id { get; set; }
+    public class User
+    {       
+        public int Id { get; set; }
         public string FullName { get; set; } 
         public int Age { get; set; }
         public string Gender { get; set; }
@@ -17,12 +16,10 @@ namespace Backend.Domain.Entities
         public string ShortIntro { get; set; }
         public string LongIntro { get; set; }
 
-        public bool Liked { get; set; } = false;
-        public bool Disliked { get; set; } = false;
-
-        public Recommendation(string fullname, int age, string gender, string city, string preferences, byte[] picture, string shortIntro, string longIntro, bool liked, bool disliked)
+        public User() { }
+        public User(int id, string fullname, int age, string gender, string city, string preferences, byte[] picture, string shortIntro, string longIntro)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             FullName = fullname;
             Age = age;
             Gender = gender;
@@ -31,8 +28,6 @@ namespace Backend.Domain.Entities
             Picture = picture;
             ShortIntro = shortIntro;
             LongIntro = longIntro;
-            Liked = liked;
-            Disliked = disliked;
         }
     }
 }

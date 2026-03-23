@@ -9,7 +9,7 @@ namespace Backend.Domain.Services
     public class UserService
     {
         private IUserRepository userRepository;
-        UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
         }

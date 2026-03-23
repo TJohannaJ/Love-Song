@@ -7,11 +7,12 @@ namespace BackEnd.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private UserService userService;
-        UserController(UserService userService)
-        {
-            this.userService = userService;
-        }
+        private readonly UserService userService;
+
+    public UserController(UserService userService)
+    {
+        this.userService = userService;
+    }
 
         private static byte[] ImageToBinary(string imagePath)
         {
@@ -22,10 +23,10 @@ namespace BackEnd.Controllers
             return b;
         }
 
-        [HttpGet(Name = "GetRecommendations")]
+        [HttpGet("recommendations/{id:int}", Name = "GetRecommendations")]
         public List<User> GetRecomenndationsForUser(int id) => userService.GetRecommendationsForUser(id);
 
-        [HttpGet(Name = "GetUserById")]
+        [HttpGet("{id:int}", Name = "GetUserById")]
         public User GetUserById(int id) => userService.GetUserById(id);
     }
 }

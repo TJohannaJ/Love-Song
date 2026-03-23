@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Profile 1": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\Tibor\\Documents\\Önlab\\onlab_project\\BackEnd",
+      "sqlDebugging": true,
+      "nativeDebugging": true
+    }
+  }
+}

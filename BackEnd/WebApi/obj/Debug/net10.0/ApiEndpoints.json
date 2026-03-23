@@ -1,15 +1,21 @@
 [
   {
     "ContainingType": "BackEnd.Controllers.UserController",
-    "Method": "Get",
-    "RelativePath": "User",
+    "Method": "GetUserById",
+    "RelativePath": "User/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[BackEnd.User, BackEnd, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "Backend.Domain.Entities.User",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -18,6 +24,33 @@
         "StatusCode": 200
       }
     ],
-    "EndpointName": "GetProfiles"
+    "EndpointName": "GetUserById"
+  },
+  {
+    "ContainingType": "BackEnd.Controllers.UserController",
+    "Method": "GetRecomenndationsForUser",
+    "RelativePath": "User/recommendations/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[Backend.Domain.Entities.User, Backend.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "GetRecommendations"
   }
 ]

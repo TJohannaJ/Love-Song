@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Backend.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Backend.Domain.Interfaces
 {
-    public interface IRecommendationRepository
+    public interface IUserRepository
     {
-        Task<IEnumerable<IRecommendationRepository>> GetRecommendations();
+        User GetUserById(int userId);
+        List<User> GetRecommendationsForUser(int userId);
+        
     }
 }
