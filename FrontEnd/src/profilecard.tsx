@@ -19,7 +19,7 @@ export default function ProfileCard(profile: Profile) {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {profile.name}, {profile.age}
+          {profile.fullName}, {profile.age}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'justify' }}>
           {profile.shortIntro}

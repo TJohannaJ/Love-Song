@@ -16,13 +16,16 @@ const Item = styled(Paper)(({ theme }) => ({
     }),
 }));
 
-export interface Profile{
+export interface Profile {
     id: number;
-    name: string;
+    fullName: string;
     age: number;
+    gender: string;
+    city: string;
+    preferences: string;
     picture: string;
-    shortIntro : string;
-    longIntro : string;
+    shortIntro: string;
+    longIntro: string;
 }
 
 export function Recommendations() {
@@ -33,12 +36,12 @@ export function Recommendations() {
     }, []);
 
     async function getProfileDatas() {
-    const response = await fetch('user');
-    if (response.ok) {
-        const data = await response.json();
-        setProfiles(data);
+        const response = await fetch('/user/recommendations/4');
+        if (response.ok) {
+            const data = await response.json();
+            setProfiles(data);
+        }
     }
-}
 
     if (!profiles) {
         return <div>Loading...</div>;
@@ -53,5 +56,6 @@ export function Recommendations() {
             ))}
         </Grid>
     </Box>
+
 }
 
