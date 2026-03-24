@@ -23,7 +23,7 @@ export interface Profile {
     gender: string;
     city: string;
     preferences: string;
-    picture: string;
+    picture: binary;
     shortIntro: string;
     longIntro: string;
 }
