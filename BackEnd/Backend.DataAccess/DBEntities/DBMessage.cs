@@ -11,10 +11,10 @@ namespace Backend.Infrastructure.DBEntities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int LikesId { get; set; }
-        public DBLike Like { get; set; }
+        public int LikeId { get; set; }
+        public virtual DBLike Like { get; set; }
         public int SenderId { get; set; }
-        public DBUser Sender { get; set; }        
+        public virtual DBUser Sender { get; set; }        
         public DateTime CreatedAt { get; set; }
         public bool Seen { get; set; }
     }
