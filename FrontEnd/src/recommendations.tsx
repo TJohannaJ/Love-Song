@@ -1,9 +1,9 @@
+import { useEffect, useState } from 'preact/hooks';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import ProfileCard from './profilecard';
-import { useEffect, useState } from 'preact/hooks';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -23,13 +23,13 @@ export interface Profile {
     gender: string;
     city: string;
     preferences: string;
-    picture: binary;
+    picture: string;
     shortIntro: string;
     longIntro: string;
 }
 
 export function Recommendations() {
-    const [profiles, setProfiles] = useState<Profile[]>();
+    const [profiles, setProfiles] = useState<Profile[]>();    
 
     useEffect(() => {
         getProfileDatas();
@@ -53,7 +53,7 @@ export function Recommendations() {
                 <Grid key={user.id} size={{ xs: 2, sm: 4, md: 4 }}>
                     <ProfileCard {...user}></ProfileCard>
                 </Grid>
-            ))}
+            ))}            
         </Grid>
     </Box>
 
