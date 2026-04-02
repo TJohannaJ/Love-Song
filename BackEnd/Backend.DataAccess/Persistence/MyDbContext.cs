@@ -1,12 +1,12 @@
 ﻿using Backend.Domain.Entities;
 using Backend.Infrastructure.DBEntities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Infrastructure.Persistence
 {
-    public class MyDbContext : DbContext
+    public class MyDbContext : IdentityDbContext<DBUser>
     {
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {

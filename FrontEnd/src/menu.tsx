@@ -13,21 +13,32 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar'
 import ImgMediaCard from './profilecard';
 import { Recommendations } from './recommendations';
+import { Header } from './header';
+import { BrowserRouter, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import { LikesPage } from './LikesPage';
+import { Profile } from './Profile';
+import { useAuth } from './AuthContext';
 
 const drawerWidth = 240;
 
-interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * Remove this when copying and pasting into your project.
-   */
-  window?: () => Window;
-}
-
-export default function Menu(props: Props) {
-  const { window } = props;
+function MenuContent() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
+  const navigate = useNavigate();
+  const { isLoggedIn, openDrawer, setOpenDrawer } = useAuth();
+
+  React.useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/login');
+    }
+  }, [isLoggedIn, navigate]);
+
+  React.useEffect(() => {
+    if (openDrawer) {
+      setMobileOpen(true);
+      setOpenDrawer(false);
+    }
+  }, [openDrawer, setOpenDrawer]);
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -44,6 +55,20 @@ export default function Menu(props: Props) {
     }
   };
 
+  const handleNavigation = (text: string) => {
+    if (text === 'Home') {
+      navigate('/');
+    } else if (text === 'Likes') {
+      navigate('/likes');
+    } else if (text === 'Chat') {
+      navigate('/chat');
+    } else if (text === 'Liked you') {
+      navigate('/likedyou');
+    } else if (text === 'Profile') {
+      navigate('/profile');
+    }
+  };
+
   const drawer = (
     <div>
       <Toolbar />
@@ -51,7 +76,7 @@ export default function Menu(props: Props) {
       <List>
         {['Home', 'Likes', 'Chat', 'Liked you'].map((text) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => handleNavigation(text)}>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
@@ -61,7 +86,7 @@ export default function Menu(props: Props) {
       <List>
         {['Profile'].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => navigate('/profile')}>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
@@ -70,39 +95,16 @@ export default function Menu(props: Props) {
     </div>
   );
 
-  // Remove this const when copying and pasting into your project.
-  const container = window !== undefined ? () => window().document.body : undefined;
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+      <Header onToggle={handleDrawerToggle}></Header>
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
-          container={container}
           variant="temporary"
           open={mobileOpen}
           onTransitionEnd={handleDrawerTransitionEnd}
@@ -113,7 +115,7 @@ export default function Menu(props: Props) {
           }}
           slotProps={{
             root: {
-              keepMounted: true, // Better open performance on mobile.
+              keepMounted: true,
             },
           }}
         >
@@ -135,8 +137,18 @@ export default function Menu(props: Props) {
         sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
       >
         <Toolbar />
-        <Recommendations></Recommendations>
+        <Routes>
+          <Route path="/" element={<Recommendations/>} />
+          <Route path="/profile" element={<Profile/>} />
+          <Route path="/likes" element={<LikesPage/>} />
+          <Route path="/chat" element={<div>Chat</div>} />
+          <Route path="/likedyou" element={<div>Liked you</div>} />
+        </Routes>
       </Box>
     </Box>
   );
+}
+
+export default function Menu() {
+  return <MenuContent />;
 }

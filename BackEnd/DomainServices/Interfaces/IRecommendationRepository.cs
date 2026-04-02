@@ -5,10 +5,9 @@ using System.Text;
 
 namespace Backend.Domain.Interfaces
 {
-    public interface IUserRepository
-    {
-        User GetUserById(int userId);
-        List<User> GetRecommendationsForUser(int userId);
-        
+    public interface IRecommendationRepository
+    {     
+        List<User> GetRecommendationsForUser(string userId);
+
     }
 }

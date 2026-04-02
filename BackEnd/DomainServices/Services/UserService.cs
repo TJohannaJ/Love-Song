@@ -13,14 +13,9 @@ namespace Backend.Domain.Services
         {
             this.userRepository = userRepository;
         }
-        public User GetUserById(int userId)
+        public User GetUserById(string userId)
         {
             return userRepository.GetUserById(userId);
-        }
-        public List<User> GetRecommendationsForUser(int userId)
-        {
-            return userRepository.GetRecommendationsForUser(userId);
-        }
-
+        }     
     }
 }

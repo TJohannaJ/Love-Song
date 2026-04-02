@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -36,7 +36,7 @@ export function Recommendations() {
     }, []);
 
     async function getProfileDatas() {
-        const response = await fetch('/user/recommendations/4');
+        const response = await fetch('https://localhost:7160/Recommendation/4');
         if (response.ok) {
             const data = await response.json();
             setProfiles(data);
@@ -48,14 +48,14 @@ export function Recommendations() {
     }
 
     return <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-            {profiles.map(user => (
-                <Grid key={user.id} size={{ xs: 2, sm: 4, md: 4 }}>
-                    <ProfileCard {...user}></ProfileCard>
+        <Grid container alignContent="center" spacing={{ xs: 1, md: 1 }} columns={{ xs: 2, sm: 4, md: 8, lg: 12 }}>
+            {profiles.map(recommendation => (
+                <Grid alignContent="center" key={recommendation.id} size={{ xs: 2, sm: 4, md: 4 }}>
+                    <ProfileCard {...recommendation}></ProfileCard>
                 </Grid>
             ))}            
         </Grid>
     </Box>
-
+    
 }
 

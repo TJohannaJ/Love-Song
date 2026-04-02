@@ -10,10 +10,10 @@ namespace Backend.Infrastructure.DBEntities
     public class DBLike
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public int UserId { get; set; }
+        public string Id { get; set; }
+        public string UserId { get; set; }
         public virtual DBUser User { get; set; }
-        public int LikedUserId { get; set; }
+        public string LikedUserId { get; set; }
         public virtual DBUser LikedUser { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool Mutual { get; set; }

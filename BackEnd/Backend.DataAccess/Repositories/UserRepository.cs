@@ -10,44 +10,13 @@ namespace Backend.Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly MyDbContext _db;
-
-        // context injected by DI
+        private readonly MyDbContext _db;       
         public UserRepository(MyDbContext db)
         {
             _db = db;
-        }
-        public List<User> GetRecommendationsForUser(int userId)
-        {
-            var recommensationsQuery = _db.Users.Where(u => u.Id != userId).Take(10).ToList();
-            if (recommensationsQuery != null)
-            {
-                var recommendations = new List<User>();
-                foreach (var recommended in recommensationsQuery)
-                {
-                    recommendations.Add(new User
-                    {
-                        Id = recommended.Id,
-                        FullName = recommended.Name,
-                        Age = recommended.Age,
-                        Gender = recommended.Gender,
-                        City = recommended.City,
-                        Preferences = recommended.Preference,
-                        Picture = recommended.Picture,
-                        ShortIntro = recommended.ShortIntro,
-                        LongIntro = recommended.LongIntro
-                    });
-                }
-                return recommendations;
-            }
-            else
-            {
-                return new List<User>();
-            }
-        }
+        }     
 
-
-        public User GetUserById(int userId)
+        public User GetUserById(string userId)
         {
             var userQuery = _db.Users.Where(u => u.Id.Equals(userId)).SingleOrDefault();
             if (userQuery != null)
@@ -55,7 +24,7 @@ namespace Backend.Infrastructure.Repositories
                 return new User
                 {
                     Id = userId,
-                    FullName = userQuery.Name,
+                    FullName = userQuery.FullName,
                     Age = userQuery.Age,
                     Gender = userQuery.Gender,
                     City = userQuery.City,

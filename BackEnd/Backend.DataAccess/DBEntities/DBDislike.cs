@@ -11,9 +11,9 @@ namespace Backend.Infrastructure.DBEntities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public virtual DBUser User { get; set; }
-        public int DislikedUserId { get; set; }
+        public string DislikedUserId { get; set; }
         public virtual DBUser DislikedUser { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool Mutual { get; set; }

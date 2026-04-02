@@ -10,7 +10,9 @@
 		"@emotion/styled": "^11.14.1",
 		"@mui/icons-material": "^7.3.8",
 		"@mui/material": "^7.3.8",
-		"preact": "^10.26.9"
+		"preact": "^10.26.9",
+		"react-hook-form": "^7.72.0",
+		"react-router-dom": "^7.13.2"
 	},
 	"devDependencies": {
 		"@preact/preset-vite": "^2.10.2",

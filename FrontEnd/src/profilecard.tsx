@@ -37,7 +37,7 @@ export default function ProfileCard(profile: Profile) {
   return (
     <React.Fragment>
     <ButtonBase onClick={() => handleClickOpen()}>
-      <Card sx={{ width: 280, height: 400 }}>
+      <Card sx={{ width: 310, height: 420 }}>
         <CardMedia
           component="img"
           alt="Profile Picture"
