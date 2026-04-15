@@ -2,7 +2,7 @@
   "profiles": {
     "Profile 1": {
       "commandName": "Project",
-      "workingDirectory": "C:\\Users\\Tibor\\Documents\\Önlab\\onlab_project\\BackEnd",
+      "workingDirectory": "C:\\Users\\Tibor\\Documents\\Önlab\\onlab_project\\BackEnd\\WebApi",
       "sqlDebugging": true,
       "nativeDebugging": true
     }
