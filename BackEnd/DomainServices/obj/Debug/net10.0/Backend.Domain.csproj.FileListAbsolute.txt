@@ -10,3 +10,4 @@ C:\Users\Tibor\Documents\Önlab\onlab_project\BackEnd\DomainServices\obj\Debug\n
 C:\Users\Tibor\Documents\Önlab\onlab_project\BackEnd\DomainServices\obj\Debug\net10.0\refint\Backend.Domain.dll
 C:\Users\Tibor\Documents\Önlab\onlab_project\BackEnd\DomainServices\obj\Debug\net10.0\Backend.Domain.pdb
 C:\Users\Tibor\Documents\Önlab\onlab_project\BackEnd\DomainServices\obj\Debug\net10.0\ref\Backend.Domain.dll
+C:\Users\Tibor\Documents\Önlab\onlab_project\BackEnd\DomainServices\obj\Debug\net10.0\Backend.Domain.csproj.AssemblyReference.cache

@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { Box, Button, TextField, Typography, Paper, MenuItem, Link } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 export function RegisterForm() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
-
+    const navigate = useNavigate();
     const onSubmit = async (data: any) => {
         const { confirmPassword, ...registerData } = data;
         try {
@@ -18,6 +18,7 @@ export function RegisterForm() {
 
             if (response.ok) {
                 alert('Sikeres regisztráció! Most már bejelentkezhetsz.');
+                navigate('/login');
             } else {
                 alert(result.message || 'Hiba történt a regisztráció során!');
             }
@@ -88,9 +89,9 @@ export function RegisterForm() {
                     error={!!errors.gender}
                     helperText={errors.gender?.message as string}
                 >
-                    <MenuItem value="no">Nő</MenuItem>
-                    <MenuItem value="ferfi">Férfi</MenuItem>
-                    <MenuItem value="egyeb">Egyéb</MenuItem>
+                    <MenuItem value="female">Nő</MenuItem>
+                    <MenuItem value="male">Férfi</MenuItem>
+                    <MenuItem value="other">Egyéb</MenuItem>
                 </TextField>
 
                 <TextField
@@ -103,9 +104,9 @@ export function RegisterForm() {
                     error={!!errors.preferences}
                     helperText={errors.preferences?.message as string}
                 >
-                    <MenuItem value="no">Nőket</MenuItem>
-                    <MenuItem value="ferfi">Férfiakat</MenuItem>
-                    <MenuItem value="mindketto">Mindkettőt</MenuItem>
+                    <MenuItem value="female">Nőket</MenuItem>
+                    <MenuItem value="male">Férfiakat</MenuItem>
+                    <MenuItem value="both">Mindkettőt</MenuItem>
                 </TextField>
 
                 <TextField

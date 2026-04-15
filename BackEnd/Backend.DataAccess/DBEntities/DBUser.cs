@@ -13,7 +13,7 @@ namespace Backend.Infrastructure.DBEntities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
         public string SpotifyToken { get; set; }
-        public string FullName { get; set; } = string.Empty;
+        public string FullName { get; set; }
         public DateTime BirthDate { get; set; }
         public int Age
         {
@@ -31,5 +31,7 @@ namespace Backend.Infrastructure.DBEntities
         public string ShortIntro { get; set; }
         public string LongIntro { get; set; }
         public byte[] Picture { get; set; }
+        public string? RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }

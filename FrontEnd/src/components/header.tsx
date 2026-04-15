@@ -18,7 +18,7 @@ export const Header = ({ onToggle }: HeaderProps) => {
     >
       <Toolbar>
         <IconButton
-          color="inherit"
+          color="inherit" 
           aria-label="open drawer"
           edge="start"
           onClick={onToggle}

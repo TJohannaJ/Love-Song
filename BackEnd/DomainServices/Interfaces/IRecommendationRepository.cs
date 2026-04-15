@@ -8,6 +8,7 @@ namespace Backend.Domain.Interfaces
     public interface IRecommendationRepository
     {     
         List<User> GetRecommendationsForUser(string userId);
-
+        void LikeUser(string currentUserId, string likedUserId);
+        void DislikeUser(string currentUserId, string likedUserId);
     }
 }

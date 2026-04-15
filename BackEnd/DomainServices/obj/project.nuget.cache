@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "v51/iFUnv+I=",
+  "dgSpecHash": "gxkWECY4yVI=",
   "success": true,
   "projectFilePath": "C:\\Users\\Tibor\\Documents\\Önlab\\onlab_project\\BackEnd\\DomainServices\\Backend.Domain.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Tibor\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.3.9\\microsoft.aspnetcore.http.abstractions.2.3.9.nupkg.sha512",
+    "C:\\Users\\Tibor\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.3.0\\microsoft.aspnetcore.http.features.2.3.0.nupkg.sha512",
+    "C:\\Users\\Tibor\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

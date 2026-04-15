@@ -1,9 +1,9 @@
-using Backend.Domain.Entities;
 using Backend.Infrastructure.DBEntities;
 using Backend.Infrastructure.Persistence;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.Mime.MediaTypeNames;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 public class Program
 {
@@ -28,6 +28,8 @@ public class Program
                 });
         });
 
+        builder.Services.AddHttpContextAccessor();
+
         builder.Services.AddScoped<Backend.Domain.Services.UserService>();
         builder.Services.AddScoped<Backend.Domain.Interfaces.IUserRepository, Backend.Infrastructure.Repositories.UserRepository>();
 
@@ -37,10 +39,28 @@ public class Program
         builder.Services.AddDbContext<MyDbContext>(opt =>
             opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-        builder.Services.AddAuthorization();
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+                ValidAudience = builder.Configuration["JWT:ValidAudience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]))
+            };
+        });
         builder.Services.AddIdentityApiEndpoints<DBUser>()
             .AddEntityFrameworkStores<MyDbContext>();
 
+        builder.Services.AddAuthorization();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -58,6 +78,7 @@ public class Program
 
         app.UseCors("AllowFrontend");
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

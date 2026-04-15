@@ -1,34 +1,25 @@
 import { useForm } from 'react-hook-form';
 import { Box, Button, TextField, Typography, Paper, Link } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../context/authContext';
+import { useEffect, useState } from 'react';
+import api from '../api/axiosInstance';
 
 export function LoginForm() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
-    const { setIsLoggedIn, setOpenDrawer } = useAuth();
+    const { login, setOpenDrawer, isLoggedIn } = useAuth();
 
     const onSubmit = async (data: any) => {
         try {
-            const response = await fetch('https://localhost:7160/api/Account/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
-            });
+            const response = await api.post('/api/Account/login', data);
+            const result = response.data;
 
-            const result = await response.json();
-
-            if (response.ok) {
-                localStorage.setItem('token', result.token);
-                setIsLoggedIn(true);
-                setOpenDrawer(true);
-                navigate('/');
-                alert('Sikeres bejelentkezés!');
-            } else {
-                alert(result.message || 'Hiba történt a bejelentkezés során!');
-            }
-        } catch (error) {
-            console.error('Network error:', error);
+            login(result.token, result.refreshToken || "");
+            setOpenDrawer(true);
+            navigate('/', { replace: true });
+        } catch (error: any) {
+            alert(error.response?.data?.message || 'Hiba történt!');
         }
     };
 

@@ -16,6 +16,5 @@ namespace Backend.Infrastructure.DBEntities
         public string DislikedUserId { get; set; }
         public virtual DBUser DislikedUser { get; set; }
         public DateTime CreatedAt { get; set; }
-        public bool Mutual { get; set; }
     }
 }

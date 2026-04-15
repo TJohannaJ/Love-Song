@@ -1,9 +1,10 @@
-import { render } from 'react';
-import Menu from './menu';
+import ReactDOM from 'react-dom/client';
 import { LoginForm } from './login';
 import { RegisterForm } from './register';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { AuthProvider, useAuth } from './AuthContext';
+import { AuthProvider, useAuth } from '../context/authContext';
+import React from 'react';
+import { Menu } from './menu';
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { isLoggedIn } = useAuth();
@@ -20,12 +21,26 @@ export function App() {
       <Routes>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
-        <Route path="/" element={<RequireAuth><Menu/></RequireAuth>} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/*" element={
+            <RequireAuth>
+              <Menu />
+            </RequireAuth>
+          } />
       </Routes>
     </BrowserRouter>
 		</AuthProvider>
 	);
 }
 
-render(<App />, document.getElementById('app'));
+const rootElement = document.getElementById('root') || document.getElementById('app');
+
+if (!rootElement) {
+    throw new Error("Nem található a 'root' vagy 'app' elem az index.html-ben!");
+}
+
+const root = ReactDOM.createRoot(rootElement);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
