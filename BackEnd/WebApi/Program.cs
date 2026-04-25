@@ -36,6 +36,9 @@ public class Program
         builder.Services.AddScoped<Backend.Domain.Services.RecommendationService>();
         builder.Services.AddScoped<Backend.Domain.Interfaces.IRecommendationRepository, Backend.Infrastructure.Repositories.RecommendationRepository>();
 
+        builder.Services.AddScoped<Backend.Domain.Services.LikesService>();
+        builder.Services.AddScoped<Backend.Domain.Interfaces.ILikesRepository, Backend.Infrastructure.Repositories.LikesRepository>();
+
         builder.Services.AddDbContext<MyDbContext>(opt =>
             opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

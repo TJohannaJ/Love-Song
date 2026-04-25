@@ -1,10 +1,9 @@
-export interface Profile {
+export interface User {
     id: string;
     fullName: string;
-    age: number;
+    birthdate: string;
     gender: string;
     city: string;
-    preferences: string;
     picture: string;
     shortIntro: string;
     longIntro: string;

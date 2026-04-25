@@ -15,7 +15,6 @@ export function MenuItems({ isLoggedIn }: { isLoggedIn: boolean }) {
     { text: 'Home', path: '/' },
     { text: 'Likes', path: '/likes' },
     { text: 'Chat', path: '/chat' },
-    { text: 'Liked you', path: '/likedyou' },
   ];
 
   const drawer = (

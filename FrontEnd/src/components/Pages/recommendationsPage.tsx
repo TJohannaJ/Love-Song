@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import ProfileCard from './profilecard';
-import api from '../api/axiosInstance';
-import { Profile } from '../intefaces/profile';
+import api from '../../api/axiosInstance';
+import { Profile } from '../../intefaces/iProfile';
+import ClickableProfileCard from '../ProfileCards/clickableProfileCard';
 
 export function Recommendations() {
     const [profiles, setProfiles] = useState<Profile[]>();
@@ -33,10 +33,9 @@ export function Recommendations() {
         <Grid container alignContent="center" spacing={{ xs: 1, md: 1 }} columns={{ xs: 2, sm: 4, md: 8, lg: 12 }}>
             {profiles.map(recommendation => (
                 <Grid alignContent="center" key={recommendation.id} size={{ xs: 2, sm: 4, md: 4 }}>
-                    <ProfileCard {...recommendation} onInteraction={removeProfileFromList}></ProfileCard>
+                    <ClickableProfileCard profile={recommendation} onInteraction={removeProfileFromList} viewType="little"></ClickableProfileCard>
                 </Grid>
             ))}
         </Grid>
     </Box>
 }
-

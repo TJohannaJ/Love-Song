@@ -1,12 +1,11 @@
-﻿using Backend.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Backend.Domain.DTOs;
+using Backend.Domain.Entities;
 
 namespace Backend.Domain.Interfaces
 {
     public interface IUserRepository
     {
-        User GetUserById(string userId);        
+         Task<User> GetUser(string userId);
+         Task UpdateProfile(string userId, UserDTO model);
     }
 }

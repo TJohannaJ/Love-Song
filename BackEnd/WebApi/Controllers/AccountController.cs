@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Backend.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -27,7 +27,7 @@ namespace Backend.WebApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
            
-            var user = new DBUser { UserName = model.Email, Email = model.Email, FullName = model.FullName, BirthDate = model.BirthDate, City = model.City, SpotifyToken= "token", Gender=model.Gender, Preference=model.Preferences, Picture = ImageToBinary("C:\\Users\\Tibor\\Documents\\Önlab\\onlab_project\\peach.png"), ShortIntro="Szia! Még nem írtam rövid bemutatkozást, de nemsokára fogok. :D", LongIntro= "Szia! Még nem írtam hosszú bemutatkozást, de nemsokára fogok. :D" };
+            var user = new DBUser { UserName = model.Email, Email = model.Email, FullName = model.FullName, BirthDate = model.BirthDate, City = model.City, SpotifyToken= "token", Gender=model.Gender, Preference=model.Preferences, Picture = ImageToBinary("..\\..\\peach.png"), ShortIntro="Szia! Még nem írtam rövid bemutatkozást, de nemsokára fogok. :D", LongIntro= "Szia! Még nem írtam hosszú bemutatkozást, de nemsokára fogok. :D" };
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
@@ -61,7 +61,7 @@ namespace Backend.WebApi.Controllers
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(accessToken),
-                    refreshToken = refreshToken, // Ezt várja a frontend login függvénye!
+                    refreshToken = refreshToken, 
                     expiration = accessToken.ValidTo,
                     user = new { email = user.Email, fullName = user.FullName },
                     message = "Sikeres bejelentkezés!"

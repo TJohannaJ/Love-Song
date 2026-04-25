@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { Box, Button, TextField, Typography, Paper, Link } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/authContext';
+import { useAuth } from './authContext';
 import { useEffect, useState } from 'react';
-import api from '../api/axiosInstance';
+import api from '../../api/axiosInstance';
 
 export function LoginForm() {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -12,7 +12,7 @@ export function LoginForm() {
 
     const onSubmit = async (data: any) => {
         try {
-            const response = await api.post('/api/Account/login', data);
+            const response = await api.post('/Account/login', data);
             const result = response.data;
 
             login(result.token, result.refreshToken || "");

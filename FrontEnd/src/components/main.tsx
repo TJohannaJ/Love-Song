@@ -1,8 +1,8 @@
 import ReactDOM from 'react-dom/client';
-import { LoginForm } from './login';
-import { RegisterForm } from './register';
+import { LoginForm } from './LoginPage/login';
+import { RegisterForm } from './LoginPage/register';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { AuthProvider, useAuth } from '../context/authContext';
+import { AuthProvider, useAuth } from './LoginPage/authContext';
 import React from 'react';
 import { Menu } from './menu';
 

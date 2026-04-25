@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Backend.Domain.Entities
+﻿namespace Backend.Domain.Entities
 {
     public class User 
     {       
         public string Id { get; set; }
-        public string FullName { get; set; } = string.Empty;
+        public string FullName { get; set; } 
         public DateTime BirthDate { get; set; }
         public int Age { get; set; }        
         public string Gender { get; set; }

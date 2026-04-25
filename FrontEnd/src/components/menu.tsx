@@ -3,12 +3,13 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
-import { Recommendations } from './recommendations';
+import { Recommendations } from './Pages/recommendationsPage';
 import { Header } from './header';
 import { Route, Routes } from 'react-router-dom';
-import { LikesPage } from './LikesPage';
-import { useAuth } from '../context/authContext';
+import { useAuth } from './LoginPage/authContext';
 import { MenuItems } from './menuItems';
+import { ProfilePage } from './Pages/profilePage';
+import { LikesPage } from './Pages/likesPage';
 
 const drawerWidth = 240;
 
@@ -55,10 +56,9 @@ export function Menu() {
         <Toolbar/>
         <Routes>
           <Route path="/" element={<Recommendations />} />
-          <Route path="/profile" element={<div>Profile</div>} />
+          <Route path="/profile" element={<ProfilePage/>} />
           <Route path="/likes" element={<LikesPage />} />
           <Route path="/chat" element={<div>Chat</div>} />
-          <Route path="/likedyou" element={<div>Liked you</div>} />
         </Routes>
       </Box>
     </Box>

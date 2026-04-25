@@ -2,9 +2,7 @@
 using Backend.Domain.Interfaces;
 using Backend.Infrastructure.DBEntities;
 using Backend.Infrastructure.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Infrastructure.Repositories
 {
@@ -15,18 +13,18 @@ namespace Backend.Infrastructure.Repositories
         {
             _db = db;
         }
-        public List<User> GetRecommendationsForUser(string userId)
+        public async Task<List<User>> GetRecommendationsForUser(string userId)
         {
-            var currentUser = _db.Users.FirstOrDefault(u => u.Id == userId);
+            var currentUser = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (currentUser == null) return new List<User>();
-            var likedUserIds = _db.Likes.Where(l => l.UserId == userId).Select(l => l.LikedUserId);
-            var dislikedUserIds = _db.Dislikes.Where(d => d.UserId == userId).Select(d => d.DislikedUserId);
+            var likedUserIds = await _db.Likes.Where(l => l.UserId == userId).Select(l => l.LikedUserId).ToListAsync();
+            var dislikedUserIds = await _db.Dislikes.Where(d => d.UserId == userId).Select(d => d.DislikedUserId).ToListAsync();
             var query = _db.Users.Where(u => u.Id != userId && !likedUserIds.Contains(u.Id) && !dislikedUserIds.Contains(u.Id));
             if (currentUser.Preference == "male" || currentUser.Preference == "female")
             {
                 query = query.Where(u => u.Gender == currentUser.Preference);
             }
-            var recommensationsQuery = query
+            return await query
                 .OrderBy(u => Guid.NewGuid()) //randomizálja a recommended userek sorrendjét
                 .Take(20)
                 .Select(recommended => new User
@@ -42,17 +40,16 @@ namespace Backend.Infrastructure.Repositories
                     ShortIntro = recommended.ShortIntro,
                     LongIntro = recommended.LongIntro
                 })
-                .ToList();
-            return recommensationsQuery;
+                .ToListAsync();
         }
 
-        public void LikeUser(string userId, string likedUserId)
+        public async Task LikeUser(string userId, string likedUserId)
         {
             //már likeolta korábban
-            var existingLike = _db.Likes.FirstOrDefault(l => l.UserId == userId && l.LikedUserId == likedUserId);
+            var existingLike = await _db.Likes.FirstOrDefaultAsync(l => l.UserId == userId && l.LikedUserId == likedUserId);
             if(existingLike != null) return;
             //már a másik irányba likeolva volt
-            var likedCurrentUser = _db.Likes.FirstOrDefault(l => l.UserId == likedUserId && l.LikedUserId == userId);
+            var likedCurrentUser =await _db.Likes.FirstOrDefaultAsync(l => l.UserId == likedUserId && l.LikedUserId == userId);
             bool isMutual = false;
             if(likedCurrentUser != null)
             {
@@ -68,15 +65,15 @@ namespace Backend.Infrastructure.Repositories
                 CreatedAt = DateTime.UtcNow,
                 Mutual = isMutual
             };
-            _db.Likes.Add(like);
-            _db.SaveChanges();
+            await _db.Likes.AddAsync(like);
+            await _db.SaveChangesAsync();
 
         }
 
-        public void DislikeUser(string userId, string dislikedUserId)
+        public async Task DislikeUser(string userId, string dislikedUserId)
         {
             //már dislikeolta korábban
-            var existingDisike = _db.Dislikes.FirstOrDefault(l => l.UserId == userId && l.DislikedUserId == dislikedUserId);
+            var existingDisike =await _db.Dislikes.FirstOrDefaultAsync(l => l.UserId == userId && l.DislikedUserId == dislikedUserId);
             if (existingDisike != null) return;
             
             //most kell egy új dislike
@@ -86,8 +83,8 @@ namespace Backend.Infrastructure.Repositories
                 DislikedUserId = dislikedUserId,
                 CreatedAt = DateTime.UtcNow
             };
-            _db.Dislikes.Add(dislike);
-            _db.SaveChanges();
+            await _db.Dislikes.AddAsync(dislike);
+            await _db.SaveChangesAsync();
 
         }
     }

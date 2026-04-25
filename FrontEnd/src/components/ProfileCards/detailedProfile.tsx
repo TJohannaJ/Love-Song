@@ -1,8 +1,10 @@
 import { Button, CardMedia, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import { ProfileCardProps } from "./profilecard";
 import React from "preact/compat";
+import { Profile } from "../../intefaces/iProfile";
+import { DislikeButton } from "../dislikeButton";
+import { LikeButton } from "../likeButton";
 
-export function DetailedProfileCard({ profile, handleLike, handleDislike, open }: { profile: ProfileCardProps, handleLike: (id: string) => void, handleDislike: (id: string) => void, open: boolean }) {
+export function DetailedProfile({ profile, handleLike, handleDislike, open }: { profile: Profile, handleLike: (id: string) => void, handleDislike: (id: string) => void, open: boolean }) {
     const descriptionElementRef = React.useRef<HTMLElement>(null);
     React.useEffect(() => {
         if (open) {
@@ -21,7 +23,7 @@ export function DetailedProfileCard({ profile, handleLike, handleDislike, open }
             </DialogContentText>
         </DialogContent>
         <DialogActions>
-            <Button onClick={() => handleLike(profile.id)}>Like</Button>
-            <Button onClick={() => handleDislike(profile.id)}>Dislike</Button>
+            <DislikeButton profile={profile} handleDislike={handleDislike} />
+            <LikeButton profile={profile} handleLike={handleLike} />  
         </DialogActions></>
 }

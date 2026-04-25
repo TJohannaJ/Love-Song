@@ -1,29 +1,23 @@
 import { useForm } from 'react-hook-form';
 import { Box, Button, TextField, Typography, Paper, MenuItem, Link } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import api from '../../api/axiosInstance';
 
 export function RegisterForm() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const navigate = useNavigate();
     const onSubmit = async (data: any) => {
-        const { confirmPassword, ...registerData } = data;
+        const { confirmPassword, ...registerData } = data;        
         try {
-            const response = await fetch('https://localhost:7160/api/Account/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(registerData),
-            });
+            const response = await api.post('/Account/register', data);
+            const result = response.data;
 
-            const result = await response.json();
-
-            if (response.ok) {
+           if (response.status === 200) {
                 alert('Sikeres regisztráció! Most már bejelentkezhetsz.');
                 navigate('/login');
-            } else {
-                alert(result.message || 'Hiba történt a regisztráció során!');
             }
-        } catch (error) {
-            console.error('Network error:', error);
+        } catch (error: any) {
+            alert(error.response?.data?.message || 'Hiba történt!');
         }
     };
 
