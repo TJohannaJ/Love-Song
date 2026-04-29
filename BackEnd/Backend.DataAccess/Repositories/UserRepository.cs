@@ -14,7 +14,84 @@ namespace Backend.Infrastructure.Repositories
             _db = db;
         }
 
-        public async Task<User> GetUser(string userId) 
+        public async Task<List<User>> GetDislikesForUser(User currentUser, List<string> dislikedUsers)
+        {
+            return await _db.Users.Where(u => dislikedUsers.Contains(u.Id)).Take(20).Select(disliked => new User
+            {
+                Id = disliked.Id,
+                FullName = disliked.FullName,
+                BirthDate = disliked.BirthDate,
+                Age = disliked.Age,
+                Gender = disliked.Gender,
+                City = disliked.City,
+                Preference = disliked.Preference,
+                Picture = disliked.Picture,
+                ShortIntro = disliked.ShortIntro,
+                LongIntro = disliked.LongIntro
+            }).ToListAsync();
+        }
+
+        public async Task<List<User>> GetLikedYouForUser(User currentUser, List<string> likedYouUserIds)
+        {
+            return await _db.Users.Where(u => likedYouUserIds.Contains(u.Id)).Take(20).Select(liked => new User
+            {
+                Id = liked.Id,
+                FullName = liked.FullName,
+                BirthDate = liked.BirthDate,
+                Age = liked.Age,
+                Gender = liked.Gender,
+                City = liked.City,
+                Preference = liked.Preference,
+                Picture = liked.Picture,
+                ShortIntro = liked.ShortIntro,
+                LongIntro = liked.LongIntro
+            }).ToListAsync();
+        }
+
+        public async Task<List<User>> GetLikesForUser(User currentUser, List<string> likedUsers)
+        {
+            return await _db.Users.Where(u => likedUsers.Contains(u.Id)).Take(20).Select(liked => new User
+            {
+                Id = liked.Id,
+                FullName = liked.FullName,
+                BirthDate = liked.BirthDate,
+                Age = liked.Age,
+                Gender = liked.Gender,
+                City = liked.City,
+                Preference = liked.Preference,
+                Picture = liked.Picture,
+                ShortIntro = liked.ShortIntro,
+                LongIntro = liked.LongIntro
+            }).ToListAsync();
+        }
+
+        public async Task<List<User>> GetRecommendationsForUser(User currentUser, List<string> likedUserIds, List<string> dislikedUserIds)
+        {
+            var query = _db.Users.Where(u => u.Id != currentUser.Id && !likedUserIds.Contains(u.Id) && !dislikedUserIds.Contains(u.Id));
+            if (currentUser.Preference == "male" || currentUser.Preference == "female")
+            {
+                query = query.Where(u => u.Gender == currentUser.Preference);
+            }
+            return await query
+                .OrderBy(u => Guid.NewGuid()) //randomizálja a recommended userek sorrendjét
+                .Take(20)
+                .Select(recommended => new User
+                {
+                    Id = recommended.Id,
+                    FullName = recommended.FullName,
+                    BirthDate = recommended.BirthDate,
+                    Age = recommended.Age,
+                    Gender = recommended.Gender,
+                    City = recommended.City,
+                    Preference = recommended.Preference,
+                    Picture = recommended.Picture,
+                    ShortIntro = recommended.ShortIntro,
+                    LongIntro = recommended.LongIntro
+                })
+                .ToListAsync();
+        }
+
+        public async Task<User> GetUserById(string userId) 
         {
             var currentUser = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (currentUser == null) return null;
@@ -24,9 +101,11 @@ namespace Backend.Infrastructure.Repositories
                 FullName = currentUser.FullName,
                 BirthDate = currentUser.BirthDate,
                 Gender = currentUser.Gender, 
-                ShortIntro=currentUser.ShortIntro,
-                LongIntro=currentUser.LongIntro,
-                Picture=currentUser.Picture 
+                ShortIntro = currentUser.ShortIntro,
+                LongIntro = currentUser.LongIntro,
+                Picture = currentUser.Picture,
+                Age = currentUser.Age,
+                Preference = currentUser.Preference
             };
         }
 

@@ -3,8 +3,20 @@ import React from "preact/compat";
 import { Profile } from "../../intefaces/iProfile";
 import { DislikeButton } from "../dislikeButton";
 import { LikeButton } from "../likeButton";
+import { UndoButton } from "../undoButton";
+import { ProfileViewType } from "./clickableProfileCard";
 
-export function DetailedProfile({ profile, handleLike, handleDislike, open }: { profile: Profile, handleLike: (id: string) => void, handleDislike: (id: string) => void, open: boolean }) {
+interface DetailedProfileProps {
+  profile: Profile;
+  handleLike: (id: string) => void;
+  handleDislike: (id: string) => void;
+  handleUndoLike: (id: string) => void,
+  handleUndoDislike: (id: string) => void,
+  viewType: ProfileViewType;              
+  open: boolean;
+}
+
+export function DetailedProfile({ profile, handleLike, handleDislike, handleUndoLike, handleUndoDislike, viewType, open }: DetailedProfileProps) {
     const descriptionElementRef = React.useRef<HTMLElement>(null);
     React.useEffect(() => {
         if (open) {
@@ -23,7 +35,15 @@ export function DetailedProfile({ profile, handleLike, handleDislike, open }: { 
             </DialogContentText>
         </DialogContent>
         <DialogActions>
-            <DislikeButton profile={profile} handleDislike={handleDislike} />
-            <LikeButton profile={profile} handleLike={handleLike} />  
+            {viewType === 'likeHistory' ? (
+                <UndoButton profile={profile} handleUndo={handleUndoLike} />
+            ) : viewType === 'dislikeHistory' ? (
+                <UndoButton profile={profile} handleUndo={handleUndoDislike} />
+            ) : (
+                <>
+                    <DislikeButton profile={profile} handleDislike={handleDislike} />
+                    <LikeButton profile={profile} handleLike={handleLike} />
+                </>
+            )}
         </DialogActions></>
 }

@@ -6,8 +6,8 @@ namespace Backend.Infrastructure.DBEntities
     [Table("Users")]
     public class DBUser : IdentityUser
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string SpotifyToken { get; set; }
         public string FullName { get; set; }
         public DateTime BirthDate { get; set; }

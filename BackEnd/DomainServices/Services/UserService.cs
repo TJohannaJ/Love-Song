@@ -6,20 +6,20 @@ namespace Backend.Domain.Services
 {
     public class UserService
     {
-        private IUserRepository _userRepository;
-        public UserService(IUserRepository userRepository)
+        private IUserRepository _userRepo;
+        public UserService(IUserRepository userRepo)
         {
-            _userRepository = userRepository;
+            _userRepo = userRepo;
         }
 
         public async Task<User> GetUser(string userId)
         {
-            return await _userRepository.GetUser(userId);
+            return await _userRepo.GetUserById(userId);
         }
 
         public async Task UpdateProfileAsync(string userId, UserDTO model)
         {
-            await _userRepository.UpdateProfile(userId, model);
+            await _userRepo.UpdateProfile(userId, model);
         }
     }
 }

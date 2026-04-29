@@ -11,11 +11,13 @@ namespace Backend.WebApi.Controllers
     [Route("[controller]")]
     public class RecommendationController : Controller
     {
-        private readonly RecommendationService _recommendationService;
+        private readonly DiscoveryService _discoveryService;
+        private readonly MatchService _matchService;
 
-        public RecommendationController(RecommendationService recommendationService)
+        public RecommendationController(MatchService matchService, DiscoveryService discoveryService)
         {
-            _recommendationService = recommendationService;
+            _matchService = matchService;
+            _discoveryService = discoveryService;
         }
 
         [Authorize]
@@ -27,7 +29,7 @@ namespace Backend.WebApi.Controllers
                 return Unauthorized();
             try
             {                
-                var recommendedUsers = await _recommendationService.GetRecommendationsForUser(userId);
+                var recommendedUsers = await _discoveryService.GetRecommendationsForUser(userId);
                 var recommendations = recommendedUsers.Select(u => u.ToProfileDTO()).ToList();
                 return Ok(recommendations);
             }
@@ -51,7 +53,7 @@ namespace Backend.WebApi.Controllers
             }
             try
             {
-                await _recommendationService.LikeUser(userId, request.RequestedUserId);
+                await _matchService.LikeUser(userId, request.RequestedUserId);
                 return Ok(new { message = "Sikeres likeolás." });
             }
             catch (Exception e)
@@ -74,7 +76,7 @@ namespace Backend.WebApi.Controllers
             }
             try
             {
-                await _recommendationService.DislikeUser(userId, request.RequestedUserId);
+                await _matchService.DislikeUser(userId, request.RequestedUserId);
                 return Ok(new { message = "Sikeres dislikeolás." });
             }
             catch (Exception e)

@@ -5,11 +5,12 @@ import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import { Recommendations } from './Pages/recommendationsPage';
 import { Header } from './header';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { useAuth } from './LoginPage/authContext';
 import { MenuItems } from './menuItems';
 import { ProfilePage } from './Pages/profilePage';
 import { LikesPage } from './Pages/likesPage';
+import { ChatPage } from './Pages/chatPage';
 
 const drawerWidth = 240;
 
@@ -25,6 +26,9 @@ export function Menu() {
     }
   }, [openDrawer, setOpenDrawer]);
 
+  const location = useLocation();
+  const isChatRoute = location.pathname === '/chat';
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -33,7 +37,7 @@ export function Menu() {
           setMobileOpen(!mobileOpen);
         }
       }}></Header>
-      <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
+      <Box component="nav" sx={{ width: { sm: isChatRoute ? 0 : drawerWidth }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
         <Drawer
           variant="temporary"
           open={mobileOpen}
@@ -46,19 +50,18 @@ export function Menu() {
         </Drawer>
         <Drawer
           variant="permanent"
-          sx={{ display: { xs: 'none', sm: 'block' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }, }}
+          sx={{ display: { xs: 'none', sm: isChatRoute ? 'none' : 'block' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }, }}
           open
         >
           <MenuItems isLoggedIn={isLoggedIn} />
         </Drawer>
       </Box>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, width: { sm: isChatRoute ? '100%' : `calc(100% - ${drawerWidth}px)` } }}>
         <Toolbar/>
         <Routes>
           <Route path="/" element={<Recommendations />} />
           <Route path="/profile" element={<ProfilePage/>} />
           <Route path="/likes" element={<LikesPage />} />
-          <Route path="/chat" element={<div>Chat</div>} />
         </Routes>
       </Box>
     </Box>

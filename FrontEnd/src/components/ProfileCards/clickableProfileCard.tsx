@@ -7,7 +7,7 @@ import { DetailedProfile } from './detailedProfile';
 import { Profile } from '../../intefaces/iProfile';
 import { NotificationProfile } from './notificationProfile';
 
-type ProfileViewType = 'notification' | 'little' | 'history';
+export type ProfileViewType = 'notification' | 'little' | 'likeHistory' | 'dislikeHistory';
 
 export interface ProfileCardProps {
   profile: Profile;
@@ -18,12 +18,21 @@ export interface ProfileCardProps {
 export default function ClickableProfileCard({ profile, onInteraction, viewType }: ProfileCardProps) {
   const [open, setOpen] = React.useState(false);
   
-  const renderSmallProfile = () => {
-        if (viewType === 'notification') {
-            return <NotificationProfile profile={profile} />;
-        }
-        return <LittleProfile profile={profile} handleLike={handleLike} handleDislike={handleDislike} />;
-    };
+ const renderSmallProfile = () => {
+    if (viewType === 'little') {
+      return <LittleProfile profile={profile} handleLike={handleLike} handleDislike={handleDislike} />;      
+    }    
+    return (
+        <NotificationProfile 
+          profile={profile} 
+          handleLike={handleLike} 
+          handleDislike={handleDislike}
+          handleUndoDislike={handleUndoDislike}
+          handleUndoLike={handleUndoLike}
+          viewType={viewType}
+        />
+      );
+  };
 
   const handleLike = async (targetUserId: string) => {
     try {
@@ -45,13 +54,30 @@ export default function ClickableProfileCard({ profile, onInteraction, viewType 
     setOpen(false);
   };
 
+ const handleUndoLike = async (id: string) => {
+    try {
+      await api.post('/Likes/undoLike', { requestedUserId: id });
+      onInteraction(id);
+    } catch (err) { console.error("Error undoing like", err); }
+    setOpen(false);
+  };
+
+  const handleUndoDislike = async (id: string) => {
+    try {
+      await api.post('/Likes/undoDislike', { requestedUserId: id });
+      onInteraction(id);
+    } catch (err) { console.error("Error undoing dislike", err); }
+    setOpen(false);
+  };
+
   return (
     <React.Fragment>
       <ButtonBase onClick={() => setOpen(true)}>
         {renderSmallProfile()}
       </ButtonBase>
       <Dialog open={open} onClose={() => setOpen(false)} scroll="paper" aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description"     >
-        <DetailedProfile profile={profile} handleLike={handleLike} handleDislike={handleDislike} open={open} />
+        <DetailedProfile profile={profile} handleLike={handleLike} handleDislike={handleDislike} handleUndoDislike={handleUndoDislike} handleUndoLike={handleUndoLike}
+          viewType={viewType} open={open} />
       </Dialog>
     </React.Fragment>
   );

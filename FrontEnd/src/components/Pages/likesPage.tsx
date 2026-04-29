@@ -1,8 +1,6 @@
 import { Avatar, Box, Button, CircularProgress, Divider, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "preact/hooks";
 import api from "../../api/axiosInstance";
-import React from "preact/compat";
-import { NotificationProfile } from "../ProfileCards/notificationProfile";
 import { Profile } from "../../intefaces/iProfile";
 import ClickableProfileCard from "../ProfileCards/clickableProfileCard";
 
@@ -53,20 +51,20 @@ export function LikesPage() {
     }
     return <div>
         <Box display="flex" justifyContent="center" gap={2} sx={{ my: 2 }}>
-            <Button 
-                size={activeTab === 'likes' ? 'large' : 'medium'} 
+            <Button
+                size={activeTab === 'likes' ? 'large' : 'medium'}
                 variant={activeTab === 'likes' ? 'contained' : 'outlined'}
                 onClick={() => setActiveTab('likes')}
             > Likejaid
             </Button>
-            <Button 
-                size={activeTab === 'likedYou' ? 'large' : 'medium'} 
+            <Button
+                size={activeTab === 'likedYou' ? 'large' : 'medium'}
                 variant={activeTab === 'likedYou' ? 'contained' : 'outlined'}
                 onClick={() => setActiveTab('likedYou')}
             > Tetszettél nekik
             </Button>
-            <Button 
-                size={activeTab === 'dislikes' ? 'large' : 'medium'} 
+            <Button
+                size={activeTab === 'dislikes' ? 'large' : 'medium'}
                 variant={activeTab === 'dislikes' ? 'contained' : 'outlined'}
                 onClick={() => setActiveTab('dislikes')}
             > Dislikejaid
@@ -77,7 +75,12 @@ export function LikesPage() {
                 {profiles && profiles.length > 0 ? (
                     profiles.map((profile, index) => (
                         <Box key={profile.id} sx={{ width: '100%', textAlign: 'center' }}>
-                            <ClickableProfileCard profile={profile} onInteraction={removeProfileFromList} viewType="notification"></ClickableProfileCard>
+                            <ClickableProfileCard profile={profile} onInteraction={removeProfileFromList}
+                                viewType={
+                                    activeTab === 'likedYou' ? 'notification' :
+                                    activeTab === 'likes' ? 'likeHistory' :
+                                    activeTab === 'dislikes' ? 'dislikeHistory' : 'notification'
+                                }></ClickableProfileCard>
                             {/* Csak akkor teszünk elválasztót, ha nem ez az utolsó elem */}
                             {index < profiles.length - 1 && (
                                 <Divider variant="fullWidth" component="li" />

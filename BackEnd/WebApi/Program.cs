@@ -11,8 +11,7 @@ public class Program
     {    
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-
+        // Add services to the container.        
         builder.Services.AddControllers();
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
@@ -29,15 +28,18 @@ public class Program
         });
 
         builder.Services.AddHttpContextAccessor();
-
-        builder.Services.AddScoped<Backend.Domain.Services.UserService>();
+       
         builder.Services.AddScoped<Backend.Domain.Interfaces.IUserRepository, Backend.Infrastructure.Repositories.UserRepository>();
+        builder.Services.AddScoped<Backend.Domain.Interfaces.ILikeRepository, Backend.Infrastructure.Repositories.LikeRepository>();
+        builder.Services.AddScoped<Backend.Domain.Interfaces.IDislikeRepository, Backend.Infrastructure.Repositories.DislikeRepository>();
+        builder.Services.AddScoped<Backend.Domain.Interfaces.IMessageRepository, Backend.Infrastructure.Repositories.MessageRepository>();
 
-        builder.Services.AddScoped<Backend.Domain.Services.RecommendationService>();
-        builder.Services.AddScoped<Backend.Domain.Interfaces.IRecommendationRepository, Backend.Infrastructure.Repositories.RecommendationRepository>();
+        builder.Services.AddScoped<Backend.Domain.Services.MatchService>();
+        builder.Services.AddScoped<Backend.Domain.Services.DiscoveryService>();
+        builder.Services.AddScoped<Backend.Domain.Services.UserService>();
+        builder.Services.AddScoped<Backend.Domain.Services.ChatService>();
 
-        builder.Services.AddScoped<Backend.Domain.Services.LikesService>();
-        builder.Services.AddScoped<Backend.Domain.Interfaces.ILikesRepository, Backend.Infrastructure.Repositories.LikesRepository>();
+        builder.Services.AddSignalR();
 
         builder.Services.AddDbContext<MyDbContext>(opt =>
             opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

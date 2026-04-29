@@ -24,11 +24,8 @@ namespace Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Backend.Infrastructure.DBEntities.DBDislike", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -53,7 +50,6 @@ namespace Backend.Infrastructure.Migrations
             modelBuilder.Entity("Backend.Infrastructure.DBEntities.DBLike", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -81,16 +77,21 @@ namespace Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Backend.Infrastructure.DBEntities.DBMessage", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LikeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ReceiverId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -104,6 +105,8 @@ namespace Backend.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("LikeId");
+
+                    b.HasIndex("ReceiverId");
 
                     b.HasIndex("SenderId");
 
@@ -396,13 +399,21 @@ namespace Backend.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backend.Infrastructure.DBEntities.DBUser", "Sender")
+                    b.HasOne("Backend.Infrastructure.DBEntities.DBUser", "Receiver")
                         .WithMany()
-                        .HasForeignKey("SenderId")
+                        .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("Backend.Infrastructure.DBEntities.DBUser", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Like");
+
+                    b.Navigation("Receiver");
 
                     b.Navigation("Sender");
                 });

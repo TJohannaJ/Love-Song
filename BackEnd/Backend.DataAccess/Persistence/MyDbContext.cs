@@ -14,23 +14,60 @@ namespace Backend.Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<DBDislike>()
-                .HasOne(d => d.DislikedUser) 
-                .WithMany()
-                .HasForeignKey(d => d.DislikedUserId)
-                .OnDelete(DeleteBehavior.NoAction);
+            // --- LIKES KONFIGURÁCIÓ ---
+            modelBuilder.Entity<DBLike>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
-            modelBuilder.Entity<DBLike>()
-                .HasOne(l => l.LikedUser)
-                .WithMany()
-                .HasForeignKey(l => l.LikedUserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<DBMessage>()
-                .HasOne(m => m.Sender)
-                .WithMany()
-                .HasForeignKey(m => m.SenderId)
-                .OnDelete(DeleteBehavior.NoAction);
+                entity.HasOne(e => e.LikedUser)
+                    .WithMany()
+                    .HasForeignKey(e => e.LikedUserId)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            // --- DISLIKES KONFIGURÁCIÓ ---
+            modelBuilder.Entity<DBDislike>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.DislikedUser)
+                    .WithMany()
+                    .HasForeignKey(e => e.DislikedUserId)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            modelBuilder.Entity<DBMessage>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.HasOne(e => e.Like)
+                      .WithMany()
+                      .HasForeignKey(e => e.LikeId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Sender)
+                      .WithMany()
+                      .HasForeignKey(e => e.SenderId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Receiver)
+                      .WithMany()
+                      .HasForeignKey(e => e.ReceiverId)
+                      .OnDelete(DeleteBehavior.NoAction);
+            });
         }
 
         public DbSet<DBUser> Users { get; set; }

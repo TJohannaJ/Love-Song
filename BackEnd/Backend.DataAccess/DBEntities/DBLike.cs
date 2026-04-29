@@ -5,8 +5,8 @@ namespace Backend.Infrastructure.DBEntities
     [Table("Likes")]
     public class DBLike
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string UserId { get; set; }
         public virtual DBUser User { get; set; }
         public string LikedUserId { get; set; }

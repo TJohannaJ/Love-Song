@@ -4,7 +4,7 @@
     {
         public string Id { get; set; }
         public string UserId { get; set; }
-        public string LikedUserId { get; set; }
+        public string DislikedUserId { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }
