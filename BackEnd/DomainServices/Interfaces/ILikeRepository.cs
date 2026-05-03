@@ -14,5 +14,6 @@ namespace Backend.Domain.Interfaces
         Task<List<string>> GetLikedUserIdsById(string userId);
         Task<List<string>> GetLikedNotMutualUserIdsById(string userId);
         Task<List<string>> GetLikedYouUsersById(string userId);
+        Task<List<string>> GetLikedMutualUsersById(string userId);
     }
 }

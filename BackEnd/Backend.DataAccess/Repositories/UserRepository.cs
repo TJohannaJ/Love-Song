@@ -65,6 +65,23 @@ namespace Backend.Infrastructure.Repositories
             }).ToListAsync();
         }
 
+        public async Task<List<User>> GetMatchesForUser(User currentUser, List<string> likedMutualUserIds)
+        {
+            return await _db.Users.Where(u => likedMutualUserIds.Contains(u.Id)).Take(20).Select(liked => new User
+            {
+                Id = liked.Id,
+                FullName = liked.FullName,
+                BirthDate = liked.BirthDate,
+                Age = liked.Age,
+                Gender = liked.Gender,
+                City = liked.City,
+                Preference = liked.Preference,
+                Picture = liked.Picture,
+                ShortIntro = liked.ShortIntro,
+                LongIntro = liked.LongIntro
+            }).ToListAsync();
+        }
+
         public async Task<List<User>> GetRecommendationsForUser(User currentUser, List<string> likedUserIds, List<string> dislikedUserIds)
         {
             var query = _db.Users.Where(u => u.Id != currentUser.Id && !likedUserIds.Contains(u.Id) && !dislikedUserIds.Contains(u.Id));

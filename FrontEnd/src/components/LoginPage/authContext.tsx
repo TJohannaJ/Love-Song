@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 
 interface AuthContextType {
   isLoggedIn: boolean;
+  token: string | null; 
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   login: (token: string, refreshToken: string) => void;
   logout: () => void;
@@ -13,11 +14,14 @@ interface AuthContextType {
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] =   React.useState(() => {
-    if (typeof window === 'undefined') return false;
-    
-    const token = localStorage.getItem('token');
-    if (!token) return false;
+  // Állapot a tokennek
+  const [token, setToken] = React.useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem('token');
+  });
+
+  const [isLoggedIn, setIsLoggedIn] = React.useState(() => {
+    if (typeof window === 'undefined' || !token) return false;
 
     try {
       const { exp } = jwtDecode<{ exp: number }>(token);
@@ -33,21 +37,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [openDrawer, setOpenDrawer] = React.useState(false);
 
-  const login = (token: string, refreshToken: string) => {
-  localStorage.setItem('token', token);
-  localStorage.setItem('refreshToken', refreshToken); 
-  setIsLoggedIn(true);
-};
+  const login = (newToken: string, refreshToken: string) => {
+    localStorage.setItem('token', newToken);
+    localStorage.setItem('refreshToken', refreshToken);
+    setToken(newToken); // Frissítjük a state-et
+    setIsLoggedIn(true);
+  };
 
   const logout = React.useCallback(() => {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
+    setToken(null); // Töröljük a state-et
     setIsLoggedIn(false);
     setOpenDrawer(false);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, login, logout, openDrawer, setOpenDrawer }}>
+    <AuthContext.Provider value={{ isLoggedIn, token, setIsLoggedIn, login, logout, openDrawer, setOpenDrawer }}>
       {children}
     </AuthContext.Provider>
   );

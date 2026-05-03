@@ -21,9 +21,10 @@ public class Program
             options.AddPolicy("AllowFrontend",
                 policy =>
                 {
-                    policy.WithOrigins("https://localhost:5175") 
+                    policy.WithOrigins("https://localhost:5175") // Ellenőrizd, hogy a React tényleg ezen fut-e!
                           .AllowAnyHeader()
-                          .AllowAnyMethod();
+                          .AllowAnyMethod()
+                          .AllowCredentials(); // Ez kell a SignalR-hez
                 });
         });
 
@@ -61,6 +62,19 @@ public class Program
                 ValidAudience = builder.Configuration["JWT:ValidAudience"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]))
             };
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];
+                    var path = context.HttpContext.Request.Path;
+                    if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chathub"))
+                    {
+                        context.Token = accessToken;
+                    }
+                    return Task.CompletedTask;
+                }
+            };
         });
         builder.Services.AddIdentityApiEndpoints<DBUser>()
             .AddEntityFrameworkStores<MyDbContext>();
@@ -87,7 +101,7 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
-
+        app.MapHub<ChatHub>("/chathub");
         app.Run();
 
     }

@@ -57,6 +57,12 @@ namespace Backend.Infrastructure.Repositories
             return null;
         }
 
+        public async Task<List<string>> GetLikedMutualUsersById(string userId)
+        {
+            var mutualUserIds = await _db.Likes.Where(l => l.UserId == userId && l.Mutual).Select(l => l.LikedUserId).ToListAsync();
+            return mutualUserIds;
+        }
+
         public async Task<List<string>> GetLikedNotMutualUserIdsById(string userId)
         {
             var likedUserIds = await _db.Likes.Where(l => l.UserId == userId && !l.Mutual).Select(l => l.LikedUserId).ToListAsync();

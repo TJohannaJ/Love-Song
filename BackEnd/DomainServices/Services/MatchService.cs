@@ -10,11 +10,13 @@ namespace Backend.Domain.Services
     {
         private readonly ILikeRepository _likeRepo;
         private readonly IDislikeRepository _dislikeRepo;
+        private readonly IUserRepository _userRepo;
 
-        public MatchService(ILikeRepository likeRepo, IDislikeRepository dislikeRepo)
+        public MatchService(ILikeRepository likeRepo, IDislikeRepository dislikeRepo, IUserRepository userRepo)
         {
             _likeRepo = likeRepo;
             _dislikeRepo = dislikeRepo;
+            _userRepo = userRepo;
         }
         public async Task LikeUser(string userId, string likedUserId)
         {
@@ -64,6 +66,14 @@ namespace Backend.Domain.Services
         public async Task UndoDislike(string userId, string dislikedUserId)
         {
             await _dislikeRepo.UndoDislike(userId, dislikedUserId);
+        }
+
+        public async Task<List<User>> GetMatchesForUserAsync(string userId)
+        {
+            var currentUser = await _userRepo.GetUserById(userId);
+            if (currentUser == null) return new List<User>();
+            var likedMutualUserIds = await _likeRepo.GetLikedMutualUsersById(userId);
+            return await _userRepo.GetMatchesForUser(currentUser, likedMutualUserIds);
         }
     }
 }

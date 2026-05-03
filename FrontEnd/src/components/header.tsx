@@ -6,19 +6,23 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 interface HeaderProps {
   onToggle: () => void;
+  isChatRoute: boolean; 
 }
 
-export const Header = ({ onToggle }: HeaderProps) => {
+export const Header = ({ onToggle, isChatRoute }: HeaderProps) => { // <-- Itt is vedd fel!
   return (
     <AppBar
       position="fixed"
       sx={{
-        display: { xs: 'block', sm: 'none' }, 
+        display: { 
+          xs: 'block', 
+          sm: isChatRoute ? 'block' : 'none' 
+        },
       }}
     >
       <Toolbar>
         <IconButton
-          color="inherit" 
+          color="inherit"
           aria-label="open drawer"
           edge="start"
           onClick={onToggle}
