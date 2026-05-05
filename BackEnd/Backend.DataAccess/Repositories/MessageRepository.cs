@@ -25,26 +25,25 @@ namespace Backend.Infrastructure.Repositories
                 Content = dbMessage.Content,
                 SenderId = dbMessage.SenderId,
                 ReceiverId = dbMessage.ReceiverId,
-                LikeId = dbMessage.LikeId,
+                LikeId1 = dbMessage.LikeId1,
+                LikeId2 = dbMessage.LikeId2,
                 CreatedAt = dbMessage.CreatedAt,
                 Seen = dbMessage.Seen
             };
         }
         public async Task<IEnumerable<Message>> GetByLikeIdAsync(string likeId)
         {
-            // Lekérjük az összes üzenetet egy adott match-hez, időrendben
+            // Olyan üzeneteket keresünk, ahol a megadott ID vagy az első, vagy a második LikeId helyen szerepel
             return await _context.Messages
-                .Where(m => m.LikeId == likeId)
-                .OrderBy(m => m.CreatedAt)
+                .Where(m => m.LikeId1 == likeId || m.LikeId2 == likeId)
+                .OrderBy(m => m.CreatedAt) // Fontos az időrend!
                 .Select(m => new Message
                 {
                     Id = m.Id,
                     Content = m.Content,
                     SenderId = m.SenderId,
                     ReceiverId = m.ReceiverId,
-                    LikeId = m.LikeId,
-                    CreatedAt = m.CreatedAt,
-                    Seen = m.Seen
+                    CreatedAt = m.CreatedAt
                 })
                 .ToListAsync();
         }
@@ -57,7 +56,8 @@ namespace Backend.Infrastructure.Repositories
                 Content = message.Content,
                 SenderId = message.SenderId,
                 ReceiverId = message.ReceiverId,
-                LikeId = message.LikeId,
+                LikeId1 = message.LikeId1,
+                LikeId2 = message.LikeId2,
                 CreatedAt = message.CreatedAt,
                 Seen = message.Seen
             };
@@ -68,6 +68,24 @@ namespace Backend.Infrastructure.Repositories
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
+        }
+        public async Task<Message?> GetLastMessageByLikeIdsAsync(List<string> likeIds)
+        {
+            var m = await _context.Messages
+                .Where(m => likeIds.Contains(m.LikeId1) || likeIds.Contains(m.LikeId2))
+                .OrderByDescending(m => m.CreatedAt)
+                .FirstOrDefaultAsync();
+
+            if (m == null) return null;
+
+            return new Message
+            {
+                Id = m.Id,
+                Content = m.Content,
+                SenderId = m.SenderId,
+                ReceiverId = m.ReceiverId,
+                CreatedAt = m.CreatedAt
+            };
         }
     }
 }

@@ -53,10 +53,15 @@ namespace Backend.Infrastructure.Persistence
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.HasOne(e => e.Like)
+                entity.HasOne(e => e.Like1)
                       .WithMany()
-                      .HasForeignKey(e => e.LikeId)
-                      .OnDelete(DeleteBehavior.Cascade);
+                      .HasForeignKey(e => e.LikeId1)
+                      .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(e => e.Like2)
+                      .WithMany()
+                      .HasForeignKey(e => e.LikeId2)
+                      .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(e => e.Sender)
                       .WithMany()

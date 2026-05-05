@@ -5,4 +5,5 @@ export interface Match {
     picture: string; // Base64 kódolt kép
     lastMessage: string;
     lastMessageTime: string; // ISO formátumú időbélyeg
+    lastMessageSenderName: string; // Az utolsó üzenet küldőjének neve
 }

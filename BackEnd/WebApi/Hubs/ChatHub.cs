@@ -13,9 +13,11 @@ public class ChatHub : Hub
 
     public async Task SendMessage(SendMessageRequestDTO request)
     {
-        var senderId = Context.UserIdentifier;
+        var senderId = Context.UserIdentifier; // SignalR azonosítja a küldőt
         if (string.IsNullOrEmpty(senderId))
             throw new HubException("User identity not found.");
+        System.Diagnostics.Debug.WriteLine($"SignalR SenderId: {senderId}");
+        request.SenderId = senderId; // Beállítjuk a DTO-ba a küldőt
 
         try
         {

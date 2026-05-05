@@ -87,7 +87,11 @@ namespace Backend.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("LikeId")
+                    b.Property<string>("LikeId1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LikeId2")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -104,7 +108,9 @@ namespace Backend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LikeId");
+                    b.HasIndex("LikeId1");
+
+                    b.HasIndex("LikeId2");
 
                     b.HasIndex("ReceiverId");
 
@@ -116,7 +122,6 @@ namespace Backend.Infrastructure.Migrations
             modelBuilder.Entity("Backend.Infrastructure.DBEntities.DBUser", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
@@ -393,10 +398,16 @@ namespace Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Backend.Infrastructure.DBEntities.DBMessage", b =>
                 {
-                    b.HasOne("Backend.Infrastructure.DBEntities.DBLike", "Like")
+                    b.HasOne("Backend.Infrastructure.DBEntities.DBLike", "Like1")
                         .WithMany()
-                        .HasForeignKey("LikeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("LikeId1")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Infrastructure.DBEntities.DBLike", "Like2")
+                        .WithMany()
+                        .HasForeignKey("LikeId2")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Backend.Infrastructure.DBEntities.DBUser", "Receiver")
@@ -411,7 +422,9 @@ namespace Backend.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Like");
+                    b.Navigation("Like1");
+
+                    b.Navigation("Like2");
 
                     b.Navigation("Receiver");
 

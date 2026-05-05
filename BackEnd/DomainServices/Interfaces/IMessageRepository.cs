@@ -8,5 +8,6 @@ namespace Backend.Domain.Interfaces
         Task<IEnumerable<Message>> GetByLikeIdAsync(string likeId);
         Task AddAsync(Message message);
         Task SaveChangesAsync();
+        Task<Message?> GetLastMessageByLikeIdsAsync(List<string> likeIds);
     }
 }

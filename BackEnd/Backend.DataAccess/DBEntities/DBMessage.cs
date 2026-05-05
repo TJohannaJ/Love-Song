@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Infrastructure.DBEntities
 {
@@ -7,11 +8,21 @@ namespace Backend.Infrastructure.DBEntities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string LikeId { get; set; }
-        public virtual DBLike Like { get; set; }
+        [Required]
+        public string LikeId1 { get; set; }
+        [ForeignKey("LikeId1")]
+        public virtual DBLike Like1 { get; set; }
+        [Required]
+        public string LikeId2 { get; set; }
+        [ForeignKey("LikeId2")]
+        public virtual DBLike Like2 { get; set; }
+        [Required]
         public string SenderId { get; set; }
+        [ForeignKey("SenderId")]
         public virtual DBUser Sender { get; set; }
+        [Required]
         public string ReceiverId { get; set; }
+        [ForeignKey("ReceiverId")]
         public virtual DBUser Receiver { get; set; }
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }

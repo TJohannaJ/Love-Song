@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 public class Program
 {
@@ -21,7 +23,7 @@ public class Program
             options.AddPolicy("AllowFrontend",
                 policy =>
                 {
-                    policy.WithOrigins("https://localhost:5175") // Ellenőrizd, hogy a React tényleg ezen fut-e!
+                    policy.WithOrigins("https://localhost:5175", "http://localhost:5175") // Ellenőrizd, hogy a React tényleg ezen fut-e!
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials(); // Ez kell a SignalR-hez
