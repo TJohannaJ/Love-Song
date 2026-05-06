@@ -1,63 +1,37 @@
-import { useForm } from 'react-hook-form';
-import { Box, Button, TextField, Typography, Paper, MenuItem, Link } from '@mui/material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import api from '../../api/axiosInstance';
+import { Box, Button, TextField, Typography, Paper, MenuItem } from '@mui/material';
+import { AuthFooter } from './authFooter';
+import { useRegisterForm } from '../../hooks/useRegisterForm';
 
 export function RegisterForm() {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const navigate = useNavigate();
-    const onSubmit = async (data: any) => {
-        const { confirmPassword, ...registerData } = data;        
-        try {
-            const response = await api.post('/Account/register', data);
-            const result = response.data;
-
-           if (response.status === 200) {
-                alert('Sikeres regisztráció! Most már bejelentkezhetsz.');
-                navigate('/login');
-            }
-        } catch (error: any) {
-            alert(error.response?.data?.message || 'Hiba történt!');
-        }
-    };
+    const { register, handleSubmit, watch, errors } = useRegisterForm();
 
     return (
         <Paper sx={{ p: 4, maxWidth: 500, mx: 'auto', mt: 5 }}>
             <Typography variant="h5" mb={2}>Regisztráció</Typography>
 
-            <Box sx={{ textAlign: 'center' }}>
-                <Typography variant="body2">
-                    Már van fiókod?{' '}
-                    <Link component={RouterLink} to="/login" sx={{ cursor: 'pointer', fontWeight: 'bold' }}>
-                        Jelentkezz be!
-                    </Link>
-                </Typography>
-            </Box>
-            <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+            <AuthFooter 
+                text="Már van fiókod?" 
+                linkText="Jelentkezz be!" 
+                to="/login" 
+            />
+
+            <Box component="form" onSubmit={handleSubmit} noValidate>
                 <TextField
-                    margin="normal"
-                    fullWidth
-                    label="Teljes név"
+                    margin="normal" fullWidth label="Teljes név"
                     {...register('fullName', { required: 'A név megadása kötelező!' })}
                     error={!!errors.fullName}
                     helperText={errors.fullName?.message as string}
                 />
 
                 <TextField
-                    margin="normal"
-                    fullWidth
-                    label="E-mail cím"
-                    type="email"
+                    margin="normal" fullWidth label="E-mail cím" type="email"
                     {...register('email', { required: 'Az e-mail megadása kötelező!' })}
                     error={!!errors.email}
                     helperText={errors.email?.message as string}
                 />
 
                 <TextField
-                    margin="normal"
-                    fullWidth
-                    label="Születési dátum"
-                    type="date"
+                    margin="normal" fullWidth label="Születési dátum" type="date"
                     slotProps={{ inputLabel: { shrink: true } }}
                     {...register('birthDate', { required: 'A születési dátum megadása kötelező!' })}
                     error={!!errors.birthDate}
@@ -65,20 +39,14 @@ export function RegisterForm() {
                 />
 
                 <TextField
-                    margin="normal"
-                    fullWidth
-                    label="Tartózkodási város"
+                    margin="normal" fullWidth label="Tartózkodási város"
                     {...register('city', { required: 'A város megadása kötelező!' })}
                     error={!!errors.city}
                     helperText={errors.city?.message as string}
                 />
 
                 <TextField
-                    select
-                    margin="normal"
-                    fullWidth
-                    label="Nem"
-                    defaultValue=""
+                    select margin="normal" fullWidth label="Nem" defaultValue=""
                     {...register('gender', { required: 'A nemed kiválasztása kötelező!' })}
                     error={!!errors.gender}
                     helperText={errors.gender?.message as string}
@@ -89,11 +57,7 @@ export function RegisterForm() {
                 </TextField>
 
                 <TextField
-                    select
-                    margin="normal"
-                    fullWidth
-                    label="Kit keresel? (Preferencia)"
-                    defaultValue=""
+                    select margin="normal" fullWidth label="Kit keresel? (Preferencia)" defaultValue=""
                     {...register('preferences', { required: 'A preferencia kiválasztása kötelező!' })}
                     error={!!errors.preferences}
                     helperText={errors.preferences?.message as string}
@@ -104,20 +68,14 @@ export function RegisterForm() {
                 </TextField>
 
                 <TextField
-                    margin="normal"
-                    fullWidth
-                    label="Jelszó"
-                    type="password"
+                    margin="normal" fullWidth label="Jelszó" type="password"
                     {...register('password', { required: 'A jelszó megadása kötelező!' })}
                     error={!!errors.password}
                     helperText={errors.password?.message as string}
                 />
 
                 <TextField
-                    margin="normal"
-                    fullWidth
-                    label="Jelszó újra"
-                    type="password"
+                    margin="normal" fullWidth label="Jelszó újra" type="password"
                     {...register('confirmPassword', {
                         required: 'A jelszó megerősítése kötelező!',
                         validate: (val: string) => watch('password') === val || "A jelszavak nem egyeznek!"
