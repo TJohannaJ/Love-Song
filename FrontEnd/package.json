@@ -1,0 +1,27 @@
+{
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"start": "vite",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@emotion/styled": "^11.14.1",
+		"@microsoft/signalr": "^10.0.0",
+		"@mui/icons-material": "^7.3.8",
+		"@mui/material": "^7.3.8",
+		"axios": "^1.15.0",
+		"jwt-decode": "^4.0.0",
+		"preact": "^10.26.9",
+		"react-hook-form": "^7.72.0",
+		"react-router-dom": "^7.13.2"
+	},
+	"devDependencies": {
+		"@preact/preset-vite": "^2.10.2",
+		"@types/node": "^25.3.5",
+		"@types/react-dom": "^19.2.3",
+		"typescript": "^5.9.3",
+		"vite": "^7.0.4"
+	}
+}

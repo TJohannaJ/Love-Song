@@ -1,0 +1,2 @@
+﻿DELETE FROM Likes
+DELETE FROM Dislikes

@@ -1,0 +1,21 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "DomainServices\\Backend.Domain.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "WebApi\\Backend.WebApi.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "Backend.DataAccess\\Backend.Infrastructure.csproj",
+        "Action": "Start",
+        "DebugTarget": "Backend.DataAccess"
+      }
+    ]
+  }
+]
