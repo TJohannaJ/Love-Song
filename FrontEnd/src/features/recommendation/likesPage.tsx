@@ -2,7 +2,7 @@ import { Avatar, Box, Button, CircularProgress, Divider, List, ListItem, ListIte
 import { useEffect, useState } from "preact/hooks";
 import api from "../../api/axiosInstance";
 import { Profile } from "../../intefaces/iProfile";
-import ClickableProfileCard from "../ProfileCards/clickableProfileCard";
+import ClickableProfileCard from "../../components/common/clickableProfileCard";
 
 export function LikesPage() {
     const [profiles, setProfiles] = useState<Profile[] | null>(null);

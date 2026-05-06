@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import { useAuth } from '../LoginPage/authContext';
+import { useAuth } from '../auth/authContext';
 import { Match } from '../../intefaces/iMatch';
 import { Message } from '../../intefaces/iMessage';
 import api from '../../api/axiosInstance';
@@ -94,11 +94,20 @@ export function ChatPage() {
                     updateMatchList(partnerId, savedMessage.content, "Partner");
                 });
 
-                // SAJÁT ÜZENET MEGERŐSÍTÉSE
                 connection.on("MessageSent", (savedMessage: any) => {
-                    // A kép_8.png alapján receiverId hiányozhat, így a selectedMatchId-t használjuk
-                    const partnerId = selectedMatchId; 
-                    updateMatchList(partnerId, savedMessage.content, "Te");
+
+                    setMatches((prevMatches) => {
+                        return prevMatches.map((match) => {
+                            if (match.id === selectedMatchId) {
+                                return {
+                                    ...match,
+                                    lastMessage: savedMessage.content,
+                                    lastMessageSenderName: "Te"
+                                };
+                            }
+                            return match;
+                        });
+                    });
                 });
             }).catch(console.error);
         }
@@ -158,9 +167,9 @@ export function ChatPage() {
                             <ListItem key={`${match.id}-${match.lastMessage}`} disablePadding>
                                 <ListItemButton selected={match.id === selectedMatchId} onClick={() => setSelectedMatchId(match.id)}>
                                     <ListItemAvatar><Avatar src={`data:image/png;base64,${match.picture}`} /></ListItemAvatar>
-                                    <ListItemText 
-                                        primary={match.fullName} 
-                                        secondary={match.lastMessage ? `${match.lastMessageSenderName}: ${match.lastMessage}` : "Kezdjetek el beszélni!"} 
+                                    <ListItemText
+                                        primary={match.fullName}
+                                        secondary={match.lastMessage ? `${match.lastMessageSenderName}: ${match.lastMessage}` : "Kezdjetek el beszélni!"}
                                     />
                                 </ListItemButton>
                             </ListItem>

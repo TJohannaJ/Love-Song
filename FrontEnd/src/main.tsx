@@ -1,10 +1,10 @@
 import ReactDOM from 'react-dom/client';
-import { LoginForm } from './LoginPage/login';
-import { RegisterForm } from './LoginPage/register';
+import { RegisterForm } from './features/auth/register';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { AuthProvider, useAuth } from './LoginPage/authContext';
+import { AuthProvider, useAuth } from './features/auth/authContext';
 import React from 'react';
-import { Menu } from './menu';
+import { Menu } from './components/layout/menu';
+import { LoginForm } from './features/auth/login';
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { isLoggedIn } = useAuth();

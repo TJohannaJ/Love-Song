@@ -3,14 +3,14 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
-import { Recommendations } from './Pages/recommendationsPage';
+import { Recommendations } from '../../features/recommendation/recommendationsPage';
 import { Header } from './header';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import { useAuth } from './LoginPage/authContext';
-import { MenuItems } from './menuItems';
-import { ProfilePage } from './Pages/profilePage';
-import { LikesPage } from './Pages/likesPage';
-import { ChatPage } from './Pages/chatPage';
+import { useAuth } from '../../features/auth/authContext';
+import { MenuItems } from '../../utils/menuItems';
+import { ProfilePage } from '../../features/profile/profilePage';
+import { ChatPage } from '../../features/chat/chatPage';
+import { LikesPage } from '../../features/recommendation/likesPage';
 
 const drawerWidth = 240;
 
@@ -46,14 +46,12 @@ export function Menu() {
           flexShrink: { sm: 0 }
         }}
       >
-        {/* TEMPORARY DRAWER - Ez felel a mobilos viselkedésért */}
         <Drawer
           variant="temporary"
           open={mobileOpen}
           onTransitionEnd={() => setIsClosing(false)}
           onClose={() => { setIsClosing(true); setMobileOpen(false); }}
           sx={{
-            // Ha chaten vagyunk, sm méret felett is maradjon block (látható, ha open)
             display: { xs: 'block', sm: isChatRoute ? 'block' : 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
@@ -62,11 +60,9 @@ export function Menu() {
           <MenuItems isLoggedIn={isLoggedIn} />
         </Drawer>
 
-        {/* PERMANENT DRAWER - Az állandó oldalsáv */}
         <Drawer
           variant="permanent"
           sx={{
-            // Ha chaten vagyunk, sm méret felett is tűnjön el (none)
             display: { xs: 'none', sm: isChatRoute ? 'none' : 'block' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
@@ -81,7 +77,6 @@ export function Menu() {
         sx={{
           flexGrow: 1,
           p: 3,
-          // Dinamikus szélesség: ha chat, akkor 100%, különben sm felett levonjuk a menüt
           width: { sm: isChatRoute ? '100%' : `calc(100% - ${drawerWidth}px)` },
           minHeight: '100vh'
         }}

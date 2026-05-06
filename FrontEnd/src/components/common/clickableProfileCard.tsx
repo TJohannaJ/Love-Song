@@ -2,10 +2,10 @@ import * as React from 'react';
 import ButtonBase from '@mui/material/ButtonBase';
 import Dialog from '@mui/material/Dialog';
 import api from '../../api/axiosInstance';
-import { LittleProfile } from './littleProfile';
 import { DetailedProfile } from './detailedProfile';
 import { Profile } from '../../intefaces/iProfile';
-import { NotificationProfile } from './notificationProfile';
+import { NotificationProfile } from '../../features/recommendation/notificationProfile';
+import { LittleProfile } from '../../features/recommendation/littleProfile';
 
 export type ProfileViewType = 'notification' | 'little' | 'likeHistory' | 'dislikeHistory';
 

@@ -1,6 +1,6 @@
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import { Button } from '@mui/material';
-import { Profile } from '../intefaces/iProfile';
+import { Profile } from '../../intefaces/iProfile';
 
 interface ButtonProps {
     profile: Profile

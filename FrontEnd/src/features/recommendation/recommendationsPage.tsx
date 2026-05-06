@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import api from '../../api/axiosInstance';
 import { Profile } from '../../intefaces/iProfile';
-import ClickableProfileCard from '../ProfileCards/clickableProfileCard';
+import ClickableProfileCard from '../../components/common/clickableProfileCard';
 
 export function Recommendations() {
     const [profiles, setProfiles] = useState<Profile[]>();

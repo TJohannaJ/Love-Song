@@ -1,11 +1,11 @@
 import { Avatar, ListItem, ListItemAvatar, ListItemText, Typography, IconButton, Box } from "@mui/material";
 import React from "preact/compat";
 import { Profile } from "../../intefaces/iProfile";
-import { DislikeButton } from "../dislikeButton";
-import { LikeButton } from "../likeButton";
+import { DislikeButton } from "../../components/common/dislikeButton";
+import { LikeButton } from "../../components/common/likeButton";
 import { Undo } from "@mui/icons-material";
-import { UndoButton } from "../undoButton";
-import { ProfileViewType } from "./clickableProfileCard";
+import { UndoButton } from "../../components/common/undoButton";
+import { ProfileViewType } from "../../components/common/clickableProfileCard";
 
 interface NotificationProfileProps {
   profile: Profile;

@@ -1,9 +1,9 @@
 import { Button, CardMedia, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import React from "preact/compat";
 import { Profile } from "../../intefaces/iProfile";
-import { DislikeButton } from "../dislikeButton";
-import { LikeButton } from "../likeButton";
-import { UndoButton } from "../undoButton";
+import { DislikeButton } from "./dislikeButton";
+import { LikeButton } from "./likeButton";
+import { UndoButton } from "./undoButton";
 import { ProfileViewType } from "./clickableProfileCard";
 
 interface DetailedProfileProps {
