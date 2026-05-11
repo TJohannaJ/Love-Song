@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://localhost:7160',
+  baseURL: 'https://localhost:7160', 
 });
 
 api.interceptors.request.use((config) => {
@@ -13,20 +13,29 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (response) => response, 
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    
     if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; 
+      originalRequest._retry = true;
+
       try {
         const refreshToken = localStorage.getItem('refreshToken');
-        const res = await axios.post('https://localhost:7160/api/auth/refresh', {
+        const accessToken = localStorage.getItem('token');
+
+        const res = await axios.post('https://localhost:7160/Account/refresh-token', {
+          accessToken: accessToken,
           refreshToken: refreshToken
         });
 
         if (res.status === 200) {
-          const newAccessToken = res.data.token;
+          const { accessToken: newAccessToken, refreshToken: newRefreshToken } = res.data;
+
           localStorage.setItem('token', newAccessToken);
+          localStorage.setItem('refreshToken', newRefreshToken);
+
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return api(originalRequest);
         }

@@ -11,13 +11,14 @@ export const useLoginForm = () => {
     const onSubmit = async (data: any) => {
         try {
             const response = await authService.login(data);
-            const { token, refreshToken } = response.data;
+            // A backend válasza: { accessToken: "...", refreshToken: "..." }
+            const { accessToken, refreshToken } = response.data;
 
-            login(token, refreshToken || "");
+            login(accessToken, refreshToken); // Itt az accessToken-t adjuk át
             setOpenDrawer(true);
             navigate('/', { replace: true });
         } catch (error: any) {
-            alert(error.response?.data?.message || 'Hiba történt!');
+            alert(error.response?.data?.message || 'Hibás e-mail vagy jelszó!');
         }
     };
 

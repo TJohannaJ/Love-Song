@@ -1,17 +1,21 @@
-﻿using Backend.Domain.Entities;
+﻿using Backend.Domain.DTOs;
+using Backend.Domain.Entities;
 using Backend.Domain.Interfaces;
+using Backend.Infrastructure.DBEntities;
 using Backend.Infrastructure.Persistence;
-using Backend.Domain.DTOs;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly MyDbContext _db;       
-        public UserRepository(MyDbContext db)
+        private readonly MyDbContext _db;
+        private readonly UserManager<DBUser> _userManager;
+        public UserRepository(MyDbContext db, UserManager<DBUser> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
 
         public async Task<List<User>> GetDislikesForUser(User currentUser, List<string> dislikedUsers)
@@ -144,6 +148,95 @@ namespace Backend.Infrastructure.Repositories
                 user.LongIntro = model.LongIntro;
             _db.Users.Update(user);
             await _db.SaveChangesAsync();
+        }
+
+        //login register
+
+        public async Task<User?> FindByEmailAsync(string email)
+        {
+            var dbUser = await _userManager.FindByEmailAsync(email);
+            return MapToDomain(dbUser);
+        }
+
+        public async Task<User?> FindByRefreshTokenAsync(string refreshToken)
+        {            
+            var dbUser = await _db.Users
+                .FirstOrDefaultAsync(u => _db.UserTokens
+                    .Any(t => t.UserId == u.Id && t.Name == "RefreshToken" && t.Value == refreshToken));
+
+            return MapToDomain(dbUser);
+        }
+
+        public async Task<IdentityResult> CreateAsync(User user, string password, string spotifyToken)
+        {
+            var dbUser = new DBUser
+            {
+                UserName = user.Email,
+                Email = user.Email,
+                FullName = user.FullName,
+                BirthDate = user.BirthDate,
+                City = user.City,
+                Gender = user.Gender,
+                Preference = user.Preference,
+                Picture = user.Picture,
+                ShortIntro = user.ShortIntro,
+                LongIntro = user.LongIntro,
+                SpotifyToken = spotifyToken
+            };
+            return await _userManager.CreateAsync(dbUser, password);
+        }
+
+        public async Task<IdentityResult> SetRefreshTokenAsync(User user, string refreshToken, DateTime expiry)
+        {
+            var dbUser = await _userManager.FindByIdAsync(user.Id);
+
+            if (dbUser == null)
+            {
+                throw new Exception($"FK HIBA ELŐZÉS: A user {user.Id} nem található a DB-ben!");
+            }
+
+            return await _userManager.SetAuthenticationTokenAsync(dbUser, "LocalApp", "RefreshToken", refreshToken);
+        }
+
+        public async Task<bool> CheckPasswordAsync(User user, string password)
+        {
+            var dbUser = await _userManager.FindByIdAsync(user.Id);
+            return dbUser != null && await _userManager.CheckPasswordAsync(dbUser, password);
+        }
+
+        public async Task<IdentityResult> UpdateAsync(User user, string? refreshToken = null, DateTime? expiry = null)
+        {
+            var dbUser = await _userManager.FindByIdAsync(user.Id);
+            if (dbUser == null) return IdentityResult.Failed();
+
+            dbUser.FullName = user.FullName;
+            dbUser.City = user.City;
+            dbUser.Gender = user.Gender;
+            dbUser.Preference = user.Preference;
+            dbUser.ShortIntro = user.ShortIntro;
+            dbUser.LongIntro = user.LongIntro;
+            dbUser.Picture = user.Picture;
+
+            return await _userManager.UpdateAsync(dbUser);
+        }
+
+        private User? MapToDomain(DBUser? dbUser)
+        {
+            if (dbUser == null) return null;
+            return new User(
+                dbUser.Id,
+                dbUser.FullName,
+                dbUser.Age,
+                dbUser.Gender,
+                dbUser.City,
+                dbUser.Preference,
+                dbUser.Picture,
+                dbUser.ShortIntro,
+                dbUser.LongIntro)
+            {
+                Email = dbUser.Email,
+                BirthDate = dbUser.BirthDate
+            };
         }
     }
 }

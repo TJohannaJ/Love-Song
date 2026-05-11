@@ -37,12 +37,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [openDrawer, setOpenDrawer] = React.useState(false);
 
-  const login = (newToken: string, refreshToken: string) => {
+  const login = (newToken: string, newRefreshToken: string) => {
     localStorage.setItem('token', newToken);
-    localStorage.setItem('refreshToken', refreshToken);
-    setToken(newToken); // Frissítjük a state-et
+    localStorage.setItem('refreshToken', newRefreshToken);
+    setToken(newToken);
     setIsLoggedIn(true);
-  };
+};
 
   const logout = React.useCallback(() => {
     localStorage.removeItem('token');

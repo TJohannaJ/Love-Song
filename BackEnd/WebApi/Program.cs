@@ -41,6 +41,9 @@ public class Program
         builder.Services.AddScoped<Backend.Domain.Services.DiscoveryService>();
         builder.Services.AddScoped<Backend.Domain.Services.UserService>();
         builder.Services.AddScoped<Backend.Domain.Services.ChatService>();
+        builder.Services.AddScoped<Backend.Domain.Services.AccountService>();
+
+        builder.Services.AddHttpClient();
 
         builder.Services.AddSignalR();
 
