@@ -1,24 +1,54 @@
-import { Box, TextField, Button, Typography, Paper, Container, CircularProgress, MenuItem } from "@mui/material";
+import { Box, TextField, Button, Typography, Paper, Container, CircularProgress, MenuItem, Snackbar, Alert } from "@mui/material";
 import { useProfile } from "../../hooks/useProfile";
 import { ProfilePicture } from "./profilePicture";
+import { SpotifyButton } from "../../components/common/spotifyButton";
+import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSpotifyLink } from "../../hooks/useSpotify";
+
 
 export function ProfilePage() {
     const { profile, loading, handleChange, handlePictureChange, updateProfile } = useProfile();
+    const { handleLink, isRedirecting } = useSpotifyLink();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [openPopup, setOpenPopup] = useState(false);
+    const [status, setStatus] = useState<{type: "success" | "error", msg: string} | null>(null);
 
-    if (loading) return (
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
-            <CircularProgress />
-        </Box>
-    );
+    useEffect(() => {
+        const spotifyStatus = searchParams.get("spotify");
+        if (spotifyStatus === "success") {
+            setStatus({ type: "success", msg: "Sikeres Spotify fiók összekapcsolás!" });
+            setOpenPopup(true);
+            setSearchParams({}, { replace: true });
+        } else if (spotifyStatus === "error") {
+            setStatus({ type: "error", msg: "Sikertelen összekapcsolás. Próbáld újra!" });
+            setOpenPopup(true);
+            setSearchParams({}, { replace: true });
+        }
+    }, [searchParams]);
+
+    const handleClose = () => setOpenPopup(false);
+
+    if (loading) return <CircularProgress />;
 
     return (
         <Container maxWidth="md">
+            {/* Popup ablak (Snackbar) */}
+            <Snackbar open={openPopup} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleClose} severity={status?.type} sx={{ width: '100%' }}>
+                    {status?.msg}
+                </Alert>
+            </Snackbar>
+
             <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
                 <Typography variant="h5" gutterBottom>Profil szerkesztése</Typography>
-                
+
                 <Box component="form" onSubmit={(e) => { e.preventDefault(); updateProfile(); }} sx={{ mt: 2 }}>
                     <Box display="flex" flexWrap="wrap" gap={3}>
-                        
+
+                        <Box width="100%">
+                            <SpotifyButton onClick={handleLink} loading={isRedirecting} />
+                        </Box>
                         <ProfilePicture picture={profile?.picture} onPictureChange={handlePictureChange} />
 
                         <Box width={{ xs: '100%', sm: 'calc(50% - 12px)' }}>
@@ -38,7 +68,7 @@ export function ProfilePage() {
                         </Box>
 
                         <TextField fullWidth label="Rövid bemutatkozás" name="shortIntro" value={profile?.shortIntro || ''} onChange={handleChange} />
-                        
+
                         <TextField fullWidth multiline rows={4} label="Részletes bemutatkozás" name="longIntro" value={profile?.longIntro || ''} onChange={handleChange} />
 
                         <Box width="100%" display="flex" justifyContent="center">

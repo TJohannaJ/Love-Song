@@ -15,12 +15,12 @@ namespace Backend.Domain.Services
 {
     public class AccountService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository _userRepo;
         private readonly IConfiguration _configuration;
 
-        public AccountService(IUserRepository userRepository, IConfiguration configuration)
+        public AccountService(IUserRepository userRepo, IConfiguration configuration)
         {
-            _userRepository = userRepository;
+            _userRepo = userRepo;
             _configuration = configuration;
         }
 
@@ -38,13 +38,13 @@ namespace Backend.Domain.Services
                 ShortIntro = "Szia! Még nem írtam rövid bemutatkozást.",
                 LongIntro = "Szia! Még nem írtam hosszú bemutatkozást."
             };
-            return await _userRepository.CreateAsync(user, model.Password, "token");
+            return await _userRepo.CreateAsync(user, model.Password, "token");
         }
 
         public async Task<object?> LoginAsync(LoginDTO model)
         {
-            var user = await _userRepository.FindByEmailAsync(model.Email);
-            if (user == null || !await _userRepository.CheckPasswordAsync(user, model.Password))
+            var user = await _userRepo.FindByEmailAsync(model.Email);
+            if (user == null || !await _userRepo.CheckPasswordAsync(user, model.Password))
                 return null;
 
             var authClaims = new List<Claim>
@@ -58,7 +58,7 @@ namespace Backend.Domain.Services
             var refreshToken = GenerateRefreshToken();
 
             // Különválasztott hívás: Csak a tokent mentjük az AspNetUserTokens táblába
-            await _userRepository.SetRefreshTokenAsync(user, refreshToken, DateTime.Now.AddDays(7));
+            await _userRepo.SetRefreshTokenAsync(user, refreshToken, DateTime.Now.AddDays(7));
 
             return new
             {
@@ -75,7 +75,7 @@ namespace Backend.Domain.Services
                 return null;
 
             // A repository az AspNetUserTokens-ben keres
-            var user = await _userRepository.FindByRefreshTokenAsync(tokenDTO.RefreshToken);
+            var user = await _userRepo.FindByRefreshTokenAsync(tokenDTO.RefreshToken);
 
             if (user == null)
                 return null;
@@ -90,7 +90,7 @@ namespace Backend.Domain.Services
             var newRefreshToken = GenerateRefreshToken();
 
             // Csak a tokenek frissítése az új adatokkal
-            await _userRepository.SetRefreshTokenAsync(user, newRefreshToken, DateTime.Now.AddDays(7));
+            await _userRepo.SetRefreshTokenAsync(user, newRefreshToken, DateTime.Now.AddDays(7));
 
             return new
             {
@@ -122,7 +122,7 @@ namespace Backend.Domain.Services
         public async Task<object?> RefreshTokenAsync(TokenRequestDTO model)
         {
             // 1. Megkeressük a felhasználót a refresh token alapján
-            var user = await _userRepository.FindByRefreshTokenAsync(model.RefreshToken);
+            var user = await _userRepo.FindByRefreshTokenAsync(model.RefreshToken);
 
             if (user == null) return null;
 
@@ -139,7 +139,7 @@ namespace Backend.Domain.Services
             var newRefreshToken = GenerateRefreshToken();
 
             // 4. Az új refresh token elmentése az adatbázisba
-            await _userRepository.SetRefreshTokenAsync(user, newRefreshToken, DateTime.Now.AddDays(7));
+            await _userRepo.SetRefreshTokenAsync(user, newRefreshToken, DateTime.Now.AddDays(7));
 
             return new
             {

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using Azure.Core;
+using Backend.Domain.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Backend.WebApi.Controllers
 {
@@ -8,36 +10,53 @@ namespace Backend.WebApi.Controllers
     [ApiController]
     public class SpotifyController : ControllerBase
     {
-        // GET: api/<SpotifyController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly SpotifyService _spotifyService;
+
+        public SpotifyController(SpotifyService spotifyService)
         {
-            return new string[] { "value1", "value2" };
+            _spotifyService = spotifyService;
         }
 
-        // GET api/<SpotifyController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [AllowAnonymous]
+        [HttpGet("callback")]
+        public async Task<IActionResult> Callback([FromQuery] string code, [FromQuery] string state)
         {
-            return "value";
+            var userId = state;
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
+                return Redirect("https://localhost:5175/profile?spotify=error&reason=missing_data");
+
+            try
+            {
+                var success = await _spotifyService.ConnectSpotifyAsync(userId, code);
+                if (success)
+                {
+                    return Redirect("https://localhost:5175/profile?spotify=success");
+                }
+                return Redirect("https://localhost:5175/profile?spotify=error&reason=sync_failed");
+            }
+            catch (Exception)
+            {
+                return Redirect("https://localhost:5175/profile?spotify=error&reason=exception");
+            }
         }
 
-        // POST api/<SpotifyController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [Authorize]
+        [HttpGet("login-url")]
+        public async Task<IActionResult> GetLoginUrl() 
         {
-        }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
 
-        // PUT api/<SpotifyController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<SpotifyController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            try
+            {
+                var loginUrl = await _spotifyService.GetSpotifyLoginUrlAsync(userId);
+                return Ok(new { url = loginUrl });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Nem sikerült generálni a Spotify belépési linket." });
+            }
         }
     }
 }

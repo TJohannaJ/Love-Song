@@ -36,12 +36,14 @@ public class Program
         builder.Services.AddScoped<Backend.Domain.Interfaces.ILikeRepository, Backend.Infrastructure.Repositories.LikeRepository>();
         builder.Services.AddScoped<Backend.Domain.Interfaces.IDislikeRepository, Backend.Infrastructure.Repositories.DislikeRepository>();
         builder.Services.AddScoped<Backend.Domain.Interfaces.IMessageRepository, Backend.Infrastructure.Repositories.MessageRepository>();
+        builder.Services.AddScoped<Backend.Domain.Interfaces.ITokenRepository, Backend.Infrastructure.Repositories.TokenRepository>();
 
         builder.Services.AddScoped<Backend.Domain.Services.MatchService>();
         builder.Services.AddScoped<Backend.Domain.Services.DiscoveryService>();
         builder.Services.AddScoped<Backend.Domain.Services.UserService>();
         builder.Services.AddScoped<Backend.Domain.Services.ChatService>();
         builder.Services.AddScoped<Backend.Domain.Services.AccountService>();
+        builder.Services.AddScoped<Backend.Domain.Services.SpotifyService>();
 
         builder.Services.AddHttpClient();
 
