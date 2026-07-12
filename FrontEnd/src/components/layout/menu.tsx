@@ -10,7 +10,7 @@ import { useAuth } from '../../features/auth/authContext';
 import { MenuItems } from '../../utils/menuItems';
 import { ProfilePage } from '../../features/profile/profilePage';
 import { ChatPage } from '../../features/chat/chatPage';
-import { LikesPage } from '../../features/recommendation/likesPage';
+import { LikesPage } from '../../features/likes/likesPage';
 
 const drawerWidth = 240;
 

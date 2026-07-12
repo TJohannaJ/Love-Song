@@ -1,6 +1,6 @@
 ﻿using Backend.Domain.DTOs;
 using Backend.Domain.Entities;
-
+using Microsoft.AspNetCore.Identity;
 namespace Backend.Domain.Interfaces
 {
     public interface IUserRepository
@@ -12,5 +12,14 @@ namespace Backend.Domain.Interfaces
         Task<List<User>> GetLikesForUser(User currentUser, List<string> likedUsers);
         Task<List<User>> GetDislikesForUser(User currentUser, List<string> dislikedUsers);
         Task<List<User>> GetMatchesForUser(User currentUser, List<string> likedMutualUserIds);
+
+        //login register
+
+        Task<User?> FindByEmailAsync(string email);
+        Task<User?> FindByRefreshTokenAsync(string refreshToken);
+        Task<IdentityResult> CreateAsync(User user, string password, string spotifyToken);
+        Task<IdentityResult> UpdateAsync(User user, string? refreshToken = null, DateTime? expiry = null);
+        Task<bool> CheckPasswordAsync(User user, string password);
+        Task<IdentityResult> SetRefreshTokenAsync(User user, string refreshToken, DateTime dateTime);
     }
 }

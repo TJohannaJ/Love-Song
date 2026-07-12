@@ -1,41 +1,51 @@
-import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import api from '../../api/axiosInstance';
-import { Profile } from '../../intefaces/iProfile';
+import Grid from '@mui/material/Grid'; 
+import { CircularProgress, Typography } from '@mui/material';
 import ClickableProfileCard from '../../components/common/clickableProfileCard';
+import { useRecommendations } from '../../hooks/useRecommendations';
 
 export function Recommendations() {
-    const [profiles, setProfiles] = useState<Profile[]>();
+    const { profiles, loading, handleLike, handleDislike } = useRecommendations();
 
-    useEffect(() => {
-        getProfileDatas();
-    }, []);
-
-    async function getProfileDatas() {
-        try {
-            const response = await api.get('/Recommendation');
-            setProfiles(response.data);
-        } catch (error) {
-            console.error("Hiba történt a letöltéskor:", error);
+    const manageInteraction = (id: string, type: string) => {
+        if (type === 'like') {
+            handleLike(id);
+        } else {
+            handleDislike(id);
         }
-    }
-
-    const removeProfileFromList = (id: string) => {
-        setProfiles((prev) => prev?.filter(p => p.id !== id) ?? []);
     };
 
-    if (!profiles) {
-        return <div>Loading...</div>;
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" py={5}>
+                <CircularProgress />
+            </Box>
+        );
     }
 
-    return <Box sx={{ flexGrow: 1 }}>
-        <Grid container alignContent="center" spacing={{ xs: 1, md: 1 }} columns={{ xs: 2, sm: 4, md: 8, lg: 12 }}>
-            {profiles.map(recommendation => (
-                <Grid alignContent="center" key={recommendation.id} size={{ xs: 2, sm: 4, md: 4 }}>
-                    <ClickableProfileCard profile={recommendation} onInteraction={removeProfileFromList} viewType="little"></ClickableProfileCard>
-                </Grid>
-            ))}
-        </Grid>
-    </Box>
+    if (!profiles || profiles.length === 0) {
+        return (
+            <Box textAlign="center" py={5}>
+                <Typography color="text.secondary">
+                    Jelenleg nincsenek új ajánlataink számodra.
+                </Typography>
+            </Box>
+        );
+    }
+
+    return (
+        <Box sx={{ flexGrow: 1, p: 2 }}>
+            <Grid container spacing={2} columns={{ xs: 2, sm: 4, md: 8, lg: 12 }}>
+                {profiles.map(recommendation => (
+                    <Grid key={recommendation.id} size={{ xs: 2, sm: 4, md: 4 }}>
+                        <ClickableProfileCard 
+                            profile={recommendation} 
+                            onInteraction={(id) => manageInteraction(id, 'like')} 
+                            viewType="little" 
+                        />
+                    </Grid>
+                ))}
+            </Grid>
+        </Box>
+    );
 }
