@@ -33,7 +33,6 @@ namespace Backend.Domain.Services
                 BirthDate = model.BirthDate,
                 City = model.City,
                 Gender = model.Gender,
-                Preference = model.Preferences,
                 Picture = ImageToBinary("..\\..\\peach.png"),
                 ShortIntro = "Szia! Még nem írtam rövid bemutatkozást.",
                 LongIntro = "Szia! Még nem írtam hosszú bemutatkozást."

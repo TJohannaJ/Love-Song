@@ -1,11 +1,14 @@
+using Backend.Domain.Interfaces;
+using Backend.Domain.Services;
 using Backend.Infrastructure.DBEntities;
 using Backend.Infrastructure.Persistence;
+using Backend.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using System.Text;
 
 public class Program
 {
@@ -32,20 +35,26 @@ public class Program
 
         builder.Services.AddHttpContextAccessor();
        
-        builder.Services.AddScoped<Backend.Domain.Interfaces.IUserRepository, Backend.Infrastructure.Repositories.UserRepository>();
-        builder.Services.AddScoped<Backend.Domain.Interfaces.ILikeRepository, Backend.Infrastructure.Repositories.LikeRepository>();
-        builder.Services.AddScoped<Backend.Domain.Interfaces.IDislikeRepository, Backend.Infrastructure.Repositories.DislikeRepository>();
-        builder.Services.AddScoped<Backend.Domain.Interfaces.IMessageRepository, Backend.Infrastructure.Repositories.MessageRepository>();
-        builder.Services.AddScoped<Backend.Domain.Interfaces.ITokenRepository, Backend.Infrastructure.Repositories.TokenRepository>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<ILikeRepository, LikeRepository>();
+        builder.Services.AddScoped<IDislikeRepository, DislikeRepository>();
+        builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+        builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+        builder.Services.AddScoped<ISongRepository, SongRepository>();
+        builder.Services.AddScoped<IUserPreferenceRepository, UserPreferenceRepository>();
 
-        builder.Services.AddScoped<Backend.Domain.Services.MatchService>();
-        builder.Services.AddScoped<Backend.Domain.Services.DiscoveryService>();
-        builder.Services.AddScoped<Backend.Domain.Services.UserService>();
-        builder.Services.AddScoped<Backend.Domain.Services.ChatService>();
-        builder.Services.AddScoped<Backend.Domain.Services.AccountService>();
-        builder.Services.AddScoped<Backend.Domain.Services.SpotifyService>();
+        builder.Services.AddScoped<MatchService>();
+        builder.Services.AddScoped<DiscoveryService>();
+        builder.Services.AddScoped<UserService>();
+        builder.Services.AddScoped<ChatService>();
+        builder.Services.AddScoped<AccountService>();
+        builder.Services.AddScoped<SpotifyService>();
+        builder.Services.AddScoped<AccountService>();
 
         builder.Services.AddHttpClient();
+
+        builder.Services.AddHttpClient<EssentiaService>();
+        builder.Services.AddHttpClient<SpotifyService>();
 
         builder.Services.AddSignalR();
 

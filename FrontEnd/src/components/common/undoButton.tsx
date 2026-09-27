@@ -13,6 +13,6 @@ export function UndoButton({ profile, handleUndo }: ButtonProps) {
             size="small"
             onClick={(e) => { e.stopPropagation(); handleUndo?.(profile.id); }}
           >
-            Visszavonás
+            Undo
           </Button>
     }

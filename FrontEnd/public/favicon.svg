@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Ciklámen-narancs gradiens definíció -->
+    <linearGradient id="favGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF007A" />
+      <stop offset="100%" stop-color="#FF5E00" />
+    </linearGradient>
+  </defs>
+
+  <!-- Lekerekített gradienses háttér -->
+  <rect width="64" height="64" rx="18" fill="url(#favGradient)" />
+
+  <!-- A logód képe fehérre maszkolva középen -->
+  <image 
+    href="/src/assets/logo.png" 
+    x="8" 
+    y="8" 
+    width="48" 
+    height="48" 
+    style="filter: brightness(0) invert(1);" 
+  />
+</svg>

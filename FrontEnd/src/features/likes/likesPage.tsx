@@ -15,9 +15,9 @@ export function LikesPage() {
     } = useLikes();
 
     const emptyMessages = {
-        likes: "Még nem kedveltél senkit.",
-        dislikes: "Még nem dislikeoltál senkit.",
-        likedYou: "Még nem kedvelt téged senki. Ne csüggedj!"
+        likes: "You haven't liked anyone yet.",
+        dislikes: "You haven't disliked anyone yet.",
+        likedYou: "No one has liked you yet. Don't give up!"
     };
 
     const viewTypeMap = {
@@ -48,7 +48,23 @@ export function LikesPage() {
             <LikeTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
             <Paper elevation={2}>
-                <List sx={{ width: '100%', bgcolor: 'background.paper', borderRadius: 2 }}>
+                <List
+                    sx={{
+                        width: '100%',
+                        bgcolor: 'background.paper',
+                        borderRadius: 3,
+                        overflow: 'visible',
+                        p: 0,
+                        '& > div:first-of-type .MuiListItem-root': {
+                            borderTopLeftRadius: 12,
+                            borderTopRightRadius: 12,
+                        },
+                        '& > div:last-of-type .MuiListItem-root': {
+                            borderBottomLeftRadius: 12,
+                            borderBottomRightRadius: 12,
+                        },
+                    }}
+                >
                     {profiles && profiles.length > 0 ? (
                         profiles.map((profile, index) => (
                             <Box key={profile.id}>

@@ -7,18 +7,23 @@ namespace Backend.WebApi.Mappers
     {
         public static ProfileDTO ToProfileDTO(this User user)
         {
-            if (user == null) return null;
-
             return new ProfileDTO
             {
                 Id = user.Id,
                 FullName = user.FullName,
                 Age = user.Age,
-                Picture = user.Picture,
-                City = user.City,
                 Gender = user.Gender,
+                City = user.City,
                 ShortIntro = user.ShortIntro,
-                LongIntro = user.LongIntro
+                LongIntro = user.LongIntro,
+                Picture = user.Picture,
+                CommonSongs = user.CommonSongs.Select(s => new CommonSongDTO
+                {
+                    SpotifyTrackId = s.SpotifyTrackId,
+                    Title = s.Title,
+                    Artist = s.Artist,
+                    PreviewUrl = s.PreviewUrl
+                }).ToList()
             };
         }
 

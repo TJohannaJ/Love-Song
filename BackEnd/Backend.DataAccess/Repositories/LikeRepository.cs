@@ -98,8 +98,11 @@ namespace Backend.Infrastructure.Repositories
             if (existingLike.Mutual == true)
             {
                 var likedCurrentUser = await _db.Likes.FirstOrDefaultAsync(l => l.UserId == likedUserId && l.LikedUserId == userId);
-                likedCurrentUser.Mutual = isMutual;
-                _db.Likes.Update(likedCurrentUser);
+                if (likedCurrentUser != null)
+                {
+                    likedCurrentUser.Mutual = isMutual;
+                    _db.Likes.Update(likedCurrentUser);
+                }
             }
             _db.Likes.Remove(existingLike);
             await _db.SaveChangesAsync();

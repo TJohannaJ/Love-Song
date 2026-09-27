@@ -1,8 +1,9 @@
 import api from '../api/axiosInstance';
 import { Profile } from '../intefaces/iProfile';
+import { UserPreference } from '../intefaces/iUserPreference';
 
 export const socialService = {
-    getLikes: (tab: 'likes' | 'likedYou' | 'dislikes') => 
+    getLikes: (tab: 'likes' | 'likedYou' | 'dislikes') =>
         api.get<Profile[]>(`/Likes/${tab}`),
 
     acceptLike: (targetId: string) => 
@@ -25,4 +26,10 @@ export const socialService = {
 
     dislikeRecommendation: (targetId: string) => 
         api.post(`/Recommendation/dislike`, { requestedUserId: targetId }),
+
+    getPreferences: () => 
+        api.get<UserPreference>('/Recommendation/preferences'),
+
+    updatePreferences: (data: Partial<UserPreference>) => 
+        api.patch('/Recommendation/preferences', data),
 };

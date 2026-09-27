@@ -73,11 +73,42 @@ namespace Backend.Infrastructure.Persistence
                       .HasForeignKey(e => e.ReceiverId)
                       .OnDelete(DeleteBehavior.NoAction);
             });
+
+            // --- USER TOP SONGS (N:M Kapcsolótábla) KONFIGURÁCIÓ ---
+            modelBuilder.Entity<DBUserTopSong>(entity =>
+            {
+                // Összetett elsődleges kulcs (UserId + SpotifyTrackId)
+                entity.HasKey(uts => new { uts.UserId, uts.SpotifyTrackId });
+
+                entity.HasOne(uts => uts.User)
+                    .WithMany(u => u.TopSongs)
+                    .HasForeignKey(uts => uts.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(uts => uts.Song)
+                    .WithMany(s => s.UserTopSongs)
+                    .HasForeignKey(uts => uts.SpotifyTrackId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // --- USER PREFERENCES (1:1 Kapcsolat) KONFIGURÁCIÓ ---
+            modelBuilder.Entity<DBUserPreference>(entity =>
+            {
+                entity.HasKey(p => p.UserId);
+
+                entity.HasOne(p => p.User)
+                    .WithOne(u => u.UserPreference)
+                    .HasForeignKey<DBUserPreference>(p => p.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
 
         public DbSet<DBUser> Users { get; set; }
         public DbSet<DBLike> Likes { get; set; }
         public DbSet<DBDislike> Dislikes { get; set; }
         public DbSet<DBMessage> Messages { get; set; }
+        public DbSet<DBSong> Songs { get; set; }
+        public DbSet<DBUserTopSong> UserTopSongs { get; set; }
+        public DbSet<DBUserPreference> UserPreferences { get; set; }
     }        
 }

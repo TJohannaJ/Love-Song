@@ -16,10 +16,25 @@ namespace Backend.Infrastructure.Repositories
         public async Task StoreTokensAsync(string userId, string accessToken, string refreshToken, int expiresIn)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return;
 
-            await _userManager.SetAuthenticationTokenAsync(user, "Spotify", "access_token", accessToken);
-            // ... többi mentés
+            await _userManager.SetAuthenticationTokenAsync(user, "Spotify", "AccessToken", accessToken);
+
+            if (!string.IsNullOrEmpty(refreshToken))
+            {
+                await _userManager.SetAuthenticationTokenAsync(user, "Spotify", "RefreshToken", refreshToken);
+            }
+        }
+
+        public async Task<string> GetAccessTokenAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            return await _userManager.GetAuthenticationTokenAsync(user, "Spotify", "AccessToken");
+        }
+
+        public async Task<string> GetRefreshTokenAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            return await _userManager.GetAuthenticationTokenAsync(user, "Spotify", "RefreshToken");
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Backend.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.5")
+                .HasAnnotation("ProductVersion", "10.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -119,6 +119,43 @@ namespace Backend.Infrastructure.Migrations
                     b.ToTable("Messages");
                 });
 
+            modelBuilder.Entity("Backend.Infrastructure.DBEntities.DBSong", b =>
+                {
+                    b.Property<string>("SpotifyTrackId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<float>("Acousticness")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Artist")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Danceability")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Energy")
+                        .HasColumnType("real");
+
+                    b.Property<float>("NormalizedBpm")
+                        .HasColumnType("real");
+
+                    b.Property<string>("PreviewUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Valence")
+                        .HasColumnType("real");
+
+                    b.HasKey("SpotifyTrackId");
+
+                    b.ToTable("Songs");
+                });
+
             modelBuilder.Entity("Backend.Infrastructure.DBEntities.DBUser", b =>
                 {
                     b.Property<string>("Id")
@@ -163,6 +200,9 @@ namespace Backend.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MusicVector")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -183,10 +223,6 @@ namespace Backend.Infrastructure.Migrations
                     b.Property<byte[]>("Picture")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("Preference")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -217,6 +253,52 @@ namespace Backend.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Backend.Infrastructure.DBEntities.DBUserPreference", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("City")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("CommonSongOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("MaxAge")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinAge")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("UserPreferences");
+                });
+
+            modelBuilder.Entity("Backend.Infrastructure.DBEntities.DBUserTopSong", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SpotifyTrackId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Rank")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "SpotifyTrackId");
+
+                    b.HasIndex("SpotifyTrackId");
+
+                    b.ToTable("UserTopSongs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -425,6 +507,36 @@ namespace Backend.Infrastructure.Migrations
                     b.Navigation("Sender");
                 });
 
+            modelBuilder.Entity("Backend.Infrastructure.DBEntities.DBUserPreference", b =>
+                {
+                    b.HasOne("Backend.Infrastructure.DBEntities.DBUser", "User")
+                        .WithOne("UserPreference")
+                        .HasForeignKey("Backend.Infrastructure.DBEntities.DBUserPreference", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Backend.Infrastructure.DBEntities.DBUserTopSong", b =>
+                {
+                    b.HasOne("Backend.Infrastructure.DBEntities.DBSong", "Song")
+                        .WithMany("UserTopSongs")
+                        .HasForeignKey("SpotifyTrackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Infrastructure.DBEntities.DBUser", "User")
+                        .WithMany("TopSongs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Song");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -474,6 +586,18 @@ namespace Backend.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Infrastructure.DBEntities.DBSong", b =>
+                {
+                    b.Navigation("UserTopSongs");
+                });
+
+            modelBuilder.Entity("Backend.Infrastructure.DBEntities.DBUser", b =>
+                {
+                    b.Navigation("TopSongs");
+
+                    b.Navigation("UserPreference");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,6 +12,7 @@ namespace Backend.Domain.Interfaces
         Task<List<User>> GetLikesForUser(User currentUser, List<string> likedUsers);
         Task<List<User>> GetDislikesForUser(User currentUser, List<string> dislikedUsers);
         Task<List<User>> GetMatchesForUser(User currentUser, List<string> likedMutualUserIds);
+        Task UpdateMusicVectorAsync(string userId, string musicVector);
 
         //login register
 

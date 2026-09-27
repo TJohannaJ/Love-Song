@@ -9,6 +9,7 @@
         public string City { get; set; }
         public string Gender { get; set; }
         public string ShortIntro { get; set; }
-        public string LongIntro { get; set; }        
+        public string LongIntro { get; set; }
+        public List<CommonSongDTO> CommonSongs { get; set; } = new();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Backend.Domain.DTOs;
+using Backend.Domain.Entities;
 using Backend.Domain.Services;
 using Backend.WebApi.Mappers;
 using Microsoft.AspNetCore.Authorization;
@@ -22,13 +23,14 @@ namespace Backend.WebApi.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<ProfileDTO>>> GetRecomenndationsForUser()
+        public async Task<ActionResult<List<ProfileDTO>>> GetRecommendationsForUser()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
+
             try
-            {                
+            {
                 var recommendedUsers = await _discoveryService.GetRecommendationsForUser(userId);
                 var recommendations = recommendedUsers.Select(u => u.ToProfileDTO()).ToList();
                 return Ok(recommendations);
@@ -85,5 +87,53 @@ namespace Backend.WebApi.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("preferences")]
+        public async Task<ActionResult<UserPreferenceDTO>> GetPreferences()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var pref = await _discoveryService.GetUserPreference(userId);
+            if (pref == null)
+            {
+                return NotFound(new { message = "Nem találhatók preferenciák a felhasználóhoz." });
+            }
+
+            return Ok(new UserPreferenceDTO
+            {
+                MinAge = pref.MinAge,
+                MaxAge = pref.MaxAge,
+                Gender = pref.Gender,
+                City = pref.City,
+                CommonSongOnly = pref.CommonSongOnly
+            });
+        }
+
+        [Authorize]
+        [HttpPatch("preferences")]
+        public async Task<IActionResult> UpdatePreferences([FromBody] UserPreferenceDTO dto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            if (dto == null)
+            {
+                return BadRequest("Érvénytelen adatok.");
+            }
+
+            await _discoveryService.UpdatePreferencePartialAsync(
+                userId,
+                dto.MinAge,
+                dto.MaxAge,
+                dto.Gender,
+                dto.City,
+                dto.CommonSongOnly
+            );
+
+            return Ok(new { message = "Preferenciák sikeresen frissítve." });
+        }
     }
 }

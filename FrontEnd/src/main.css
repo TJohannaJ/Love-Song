@@ -1,82 +1,86 @@
 :root {
-	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-	line-height: 1.5;
-	font-weight: 400;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
 
-	color: #222;
-	background-color: #ffffff;
+    color: #2f3035;
+    background-color: #f1f2f4;
+    --brand-gradient: linear-gradient(135deg, #FF007A 0%, #FF5E00 100%);
 
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	-webkit-text-size-adjust: 100%;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Teljes ablak fixálása görgetés nélkül */
+html, body, #root, #app {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    background-color: #f1f2f4;
+    overflow: hidden; /* Szigorúan kikapcsolja az oldal szintű görgetést */
+    box-sizing: border-box;
 }
 
 body {
-	margin: 0;
-	display: flex;
-	align-items: center;
-	min-height: 100vh;
+    display: block;
+    min-height: 100vh;
+    background-color: #f1f2f4;
 }
 
-#app {
-	max-width: 1280px;
-	margin: 0 auto;
-	text-align: center;
+#app, #root {
+    max-width: none;
+    margin: 0;
+    text-align: left;
+    background-color: #f1f2f4;
 }
 
+/* Külön stílus a görgethető paneleknek (például a RegisterForm kártyának) */
+.auth-scroll-panel {
+    scrollbar-width: thin;
+    scrollbar-color: #a8abb2 #e2e3e6;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.auth-scroll-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.auth-scroll-panel::-webkit-scrollbar-track {
+    background: #e2e3e6;
+    border-radius: 999px;
+}
+
+.auth-scroll-panel::-webkit-scrollbar-thumb {
+    background: #a8abb2;
+    border-radius: 999px;
+    transition: background-color 0.2s ease;
+}
+
+.auth-scroll-panel::-webkit-scrollbar-thumb:hover {
+    background: #9699a1;
+}
+
+.auth-scroll-panel::-webkit-scrollbar-thumb:active {
+    background: #858891;
+}
+
+/* Képek globális margójának tisztázása, hogy ne tolja el az elrendezést */
 img {
-	margin-bottom: 1.5rem;
+    margin-bottom: 0;
 }
 
-img:hover {
-	filter: drop-shadow(0 0 2em #673ab8aa);
-}
-
-section {
-	margin-top: 5rem;
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	column-gap: 1.5rem;
-}
-
-.resource {
-	padding: 0.75rem 1.5rem;
-	border-radius: 0.5rem;
-	text-align: left;
-	text-decoration: none;
-	color: #222;
-	background-color: #f1f1f1;
-	border: 1px solid transparent;
-}
-
-.resource:hover {
-	border: 1px solid #000;
-	box-shadow: 0 25px 50px -12px #673ab888;
-}
-
-@media (max-width: 639px) {
-	#app {
-		margin: 2rem;
-	}
-	section {
-		margin-top: 5rem;
-		grid-template-columns: 1fr;
-		row-gap: 1rem;
-	}
+img.interactive:hover {
+    filter: drop-shadow(0 0 2em #f48fb1aa);
 }
 
 @media (prefers-color-scheme: dark) {
-	:root {
-		color: #ccc;
-		background-color: #1a1a1a;
-	}
-	.resource {
-		color: #ccc;
-		background-color: #161616;
-	}
-	.resource:hover {
-		border: 1px solid #bbb;
-	}
+    :root {
+        color: #2f3035;
+        background-color: #f1f2f4;
+    }
 }

@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemButton, ListItemAvatar, Avatar, ListItemText, Paper, Box, Typography } from '@mui/material';
+import { List, ListItem, ListItemButton, ListItemAvatar, Avatar, ListItemText, Paper, Box, Typography, CircularProgress } from '@mui/material';
 import { Match } from '../../intefaces/iMatch';
 
 interface Props {
@@ -11,24 +11,62 @@ interface Props {
 export const ChatList = ({ matches, selectedId, onSelect, loading }: Props) => (
     <Paper sx={{ width: { xs: '100%', md: 320 }, display: 'flex', flexDirection: 'column' }} elevation={3}>
         <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
-            <Typography variant="h6">Csevegések</Typography>
+            <Typography variant="h6">Chats</Typography>
         </Box>
         <List sx={{ overflowY: 'auto', flex: 1 }}>
-            {loading ? <Typography sx={{ p: 2 }}>Betöltés...</Typography> :
-                matches.map((match) => (
-                    <ListItem key={match.id} disablePadding>
-                        <ListItemButton selected={match.id === selectedId} onClick={() => onSelect(match.id)}>
-                            <ListItemAvatar>
-                                <Avatar src={`data:image/png;base64,${match.picture}`} />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={match.fullName}
-                                secondary={match.lastMessage ? `${match.lastMessageSenderName}: ${match.lastMessage}` : "Kezdjetek el beszélni!"}
-                            />
-                        </ListItemButton>
-                    </ListItem>
-                ))
-            }
+            {loading ? (
+                <Box display="flex" justifyContent="center" py={5}>
+                    <CircularProgress sx={{ color: '#FF007A' }} />
+                </Box>
+            ) : matches.length === 0 ? (
+                <Box sx={{ px: 2, py: 5, textAlign: 'center' }}>
+                    <Typography color="text.secondary">
+                        You don't have a match yet, check the Likes page.
+                    </Typography>
+                </Box>
+            ) : (
+                matches.map((match) => {
+                    const isSelected = match.id === selectedId;
+                    return (
+                        <ListItem key={match.id} disablePadding>
+                            <ListItemButton 
+                                selected={isSelected} 
+                                onClick={() => onSelect(match.id)}
+                                sx={{
+                                    '&.Mui-selected': {
+                                        backgroundColor: 'rgba(255, 0, 122, 0.08)',
+                                        borderLeft: '4px solid #FF007A',
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(255, 0, 122, 0.12)',
+                                        },
+                                    },
+                                }}
+                            >
+                                <ListItemAvatar>
+                                    <Avatar 
+                                        src={`data:image/png;base64,${match.picture}`} 
+                                        sx={{
+                                            ...(isSelected && {
+                                                p: '2px',
+                                                background: 'linear-gradient(135deg, #FF007A 0%, #FF5E00 100%)',
+                                            })
+                                        }}
+                                    />
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={match.fullName}
+                                    secondary={match.lastMessage ? `${match.lastMessageSenderName}: ${match.lastMessage}` : "Start chatting!"}
+                                    slotProps={{
+                                        primary: {
+                                            fontWeight: isSelected ? 600 : 400,
+                                        }
+                                    }}
+                                />
+                            </ListItemButton>
+                        </ListItem>
+                    );
+                })
+            )}
         </List>
     </Paper>
 );

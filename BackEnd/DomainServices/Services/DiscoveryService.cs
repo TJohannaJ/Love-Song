@@ -2,7 +2,8 @@
 using Backend.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Backend.Domain.Services
 {
@@ -11,13 +12,20 @@ namespace Backend.Domain.Services
         private readonly IUserRepository _userRepo;
         private readonly ILikeRepository _likeRepo;
         private readonly IDislikeRepository _dislikeRepo;
+        private readonly IUserPreferenceRepository _preferenceRepo;
 
-        public DiscoveryService(IUserRepository userRepo, ILikeRepository likeRepo, IDislikeRepository dislikeRepo)
+        public DiscoveryService(
+            IUserRepository userRepo,
+            ILikeRepository likeRepo,
+            IDislikeRepository dislikeRepo,
+            IUserPreferenceRepository preferenceRepo)
         {
             _userRepo = userRepo;
             _likeRepo = likeRepo;
             _dislikeRepo = dislikeRepo;
+            _preferenceRepo = preferenceRepo;
         }
+
         public async Task<List<User>> GetRecommendationsForUser(string userId)
         {
             var currentUser = await _userRepo.GetUserById(userId);
@@ -40,6 +48,8 @@ namespace Backend.Domain.Services
             var currentUser = await _userRepo.GetUserById(userId);
             if (currentUser == null) return new List<User>();
             var likedUserIds = await _likeRepo.GetLikedNotMutualUserIdsById(userId);
+            var dislikedUserIds = await _dislikeRepo.GetDislikedUserIdsById(userId);
+            likedUserIds = likedUserIds.Except(dislikedUserIds).ToList();
             return await _userRepo.GetLikesForUser(currentUser, likedUserIds);
         }
 
@@ -51,5 +61,16 @@ namespace Backend.Domain.Services
             return await _userRepo.GetDislikesForUser(currentUser, dislikedUserIds);
         }
 
+        // --- PREFERENCIA METÓDUSOK ---
+
+        public async Task<UserPreference?> GetUserPreference(string userId)
+        {
+            return await _preferenceRepo.GetByUserIdAsync(userId);
+        }
+
+        public async Task UpdatePreferencePartialAsync(string userId, int? minAge, int? maxAge, string? gender, string? city, bool? commonSongOnly)
+        {
+            await _preferenceRepo.UpdatePartialAsync(userId, minAge, maxAge, gender, city, commonSongOnly);
+        }
     }
 }

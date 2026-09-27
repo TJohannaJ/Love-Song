@@ -13,10 +13,12 @@ import { ChatPage } from '../../features/chat/chatPage';
 import { LikesPage } from '../../features/likes/likesPage';
 
 const drawerWidth = 240;
+const collapsedDrawerWidth = 64;
 
 export function Menu() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
+  const [desktopDrawerExpanded, setDesktopDrawerExpanded] = React.useState(false);
   const { isLoggedIn, openDrawer, setOpenDrawer } = useAuth();
 
   const location = useLocation();
@@ -32,7 +34,7 @@ export function Menu() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <Header isChatRoute={isChatRoute} onToggle=
+      <Header onToggle=
         {() => {
           if (!isClosing) {
             setMobileOpen(!mobileOpen);
@@ -41,9 +43,12 @@ export function Menu() {
 
       <Box
         component="nav"
+        onMouseEnter={() => setDesktopDrawerExpanded(true)}
+        onMouseLeave={() => setDesktopDrawerExpanded(false)}
         sx={{
-          width: { sm: isChatRoute ? 0 : drawerWidth },
-          flexShrink: { sm: 0 }
+          width: { sm: desktopDrawerExpanded ? drawerWidth : collapsedDrawerWidth },
+          flexShrink: { sm: 0 },
+          transition: 'width 0.3s ease',
         }}
       >
         <Drawer
@@ -52,23 +57,28 @@ export function Menu() {
           onTransitionEnd={() => setIsClosing(false)}
           onClose={() => { setIsClosing(true); setMobileOpen(false); }}
           sx={{
-            display: { xs: 'block', sm: isChatRoute ? 'block' : 'none' },
+            display: { xs: 'block', sm: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
           slotProps={{ root: { keepMounted: true } }}
         >
-          <MenuItems isLoggedIn={isLoggedIn} />
+          <MenuItems isLoggedIn={isLoggedIn} expanded />
         </Drawer>
 
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: 'none', sm: isChatRoute ? 'none' : 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: desktopDrawerExpanded ? drawerWidth : collapsedDrawerWidth,
+              overflowX: 'hidden',
+              transition: 'width 0.3s ease',
+            },
           }}
           open
         >
-          <MenuItems isLoggedIn={isLoggedIn} />
+          <MenuItems isLoggedIn={isLoggedIn} expanded={desktopDrawerExpanded} />
         </Drawer>
       </Box>
 
@@ -77,11 +87,15 @@ export function Menu() {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: isChatRoute ? '100%' : `calc(100% - ${drawerWidth}px)` },
-          minHeight: '100vh'
+          width: { sm: `calc(100% - ${collapsedDrawerWidth}px)` },
+          minHeight: '100vh',
+          transition: 'width 0.3s ease',
+          ...(desktopDrawerExpanded && {
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+          }),
         }}
       >
-        <Toolbar />
+        <Toolbar sx={{ display: { xs: 'block', sm: 'none' } }} />
         <Routes>
           <Route path="/" element={<Recommendations />} />
           <Route path="/profile" element={<ProfilePage />} />

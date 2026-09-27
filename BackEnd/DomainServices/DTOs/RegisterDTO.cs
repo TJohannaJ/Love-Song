@@ -24,7 +24,5 @@ namespace Backend.Domain.DTOs
         public string City { get; set; }
         [Required(ErrorMessage = "A nem megadása kötelező.")]
         public string Gender {  get; set; }
-        [Required(ErrorMessage = "A preferált nem megadása kötelező.")]
-        public string Preferences { get; set; }
     }
 }

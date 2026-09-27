@@ -22,7 +22,7 @@ export function SpotifyButton({ onClick, loading }: SpotifyButtonProps) {
                 fontSize: '1rem'
             }}
         >
-            {loading ? <CircularProgress size={24} sx={{ color: '#000' }} /> : "Spotify fiók összekötése"}
+            {loading ? <CircularProgress size={24} sx={{ color: '#000' }} /> : "Connect Spotify Account"}
         </Button>
     );
 }

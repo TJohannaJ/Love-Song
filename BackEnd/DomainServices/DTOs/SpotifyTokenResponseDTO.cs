@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Backend.Domain.DTOs
 {
     public class SpotifyTokenResponseDTO
     {
-        [System.Text.Json.Serialization.JsonPropertyName("access_token")]
+        [JsonPropertyName("access_token")] // Ez mondja meg a C#-nak, mit keressen a JSON-ben
         public string AccessToken { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("refresh_token")]
+        [JsonPropertyName("refresh_token")] // EZ A LEGFONTOSABB SOR
         public string RefreshToken { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("expires_in")]
+        [JsonPropertyName("expires_in")]
         public int ExpiresIn { get; set; }
+
+        [JsonPropertyName("token_type")]
+        public string TokenType { get; set; }
     }
 }

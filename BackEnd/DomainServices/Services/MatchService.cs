@@ -20,6 +20,9 @@ namespace Backend.Domain.Services
         }
         public async Task LikeUser(string userId, string likedUserId)
         {
+            // A like és a dislike kölcsönösen kizárják egymást.
+            await _dislikeRepo.UndoDislike(userId, likedUserId);
+
             //user already liked likedUser
             var existingLike = await _likeRepo.GetByUsers(userId, likedUserId);
             if (existingLike != null) return;
@@ -56,6 +59,9 @@ namespace Backend.Domain.Services
                 CreatedAt = DateTime.UtcNow
             };
             await _dislikeRepo.AddOrUpdateAsync(dislike);
+
+            // A like és a dislike kölcsönösen kizárják egymást.
+            await _likeRepo.UndoLike(userId, dislikedUserId);
         }
 
         public async Task UndoLike(string userId, string likedUserId)

@@ -29,18 +29,31 @@ export function ChatPage() {
 
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
                 <Paper sx={{ p: 2, mb: 1 }} elevation={3}>
-                    <Typography variant="h6">{selectedMatch?.fullName || 'Válassz partnert'}</Typography>
+                    <Typography variant="h6">{selectedMatch?.fullName || 'Select someone to chat with!'}</Typography>
                 </Paper>
 
                 <Paper sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }} elevation={3}>
                     <Box ref={scrollRef} sx={{ flex: 1, p: 2, overflowY: 'auto', backgroundColor: '#f5f5f5', display: 'flex', flexDirection: 'column' }}>
-                        {(messages[selectedMatchId] || []).map((msg: any, idx: number) => (
-                            <Box key={msg.id || idx} sx={{ display: 'flex', justifyContent: msg.author === 'me' ? 'flex-end' : 'flex-start', mb: 1.5 }}>
-                                <Box sx={{ maxWidth: '75%', px: 2, py: 1, borderRadius: 2, bgcolor: msg.author === 'me' ? 'primary.main' : 'white', color: msg.author === 'me' ? 'white' : 'text.primary', boxShadow: 1 }}>
-                                    <Typography variant="body2">{msg.text}</Typography>
+                        {(messages[selectedMatchId] || []).map((msg: any, idx: number) => {
+                            const isMe = msg.author === 'me';
+                            return (
+                                <Box key={msg.id || idx} sx={{ display: 'flex', justifyContent: isMe ? 'flex-end' : 'flex-start', mb: 1.5 }}>
+                                    <Box 
+                                        sx={{ 
+                                            maxWidth: '75%', 
+                                            px: 2, 
+                                            py: 1, 
+                                            borderRadius: 3, 
+                                            background: isMe ? 'linear-gradient(135deg, #FF007A 0%, #FF5E00 100%)' : 'white', 
+                                            color: isMe ? 'white' : 'text.primary', 
+                                            boxShadow: 1 
+                                        }}
+                                    >
+                                        <Typography variant="body2">{msg.text}</Typography>
+                                    </Box>
                                 </Box>
-                            </Box>
-                        ))}
+                            );
+                        })}
                     </Box>
                     <Divider />
                     <Box sx={{ p: 2, bgcolor: 'white' }}>
@@ -51,7 +64,23 @@ export function ChatPage() {
                             InputProps={{ 
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <IconButton color="primary" onClick={handleSendAction} disabled={!inputValue.trim()}><SendIcon /></IconButton>
+                                        <IconButton 
+                                            onClick={handleSendAction} 
+                                            disabled={!inputValue.trim()}
+                                            sx={{
+                                                background: inputValue.trim() ? 'linear-gradient(135deg, #FF007A 0%, #FF5E00 100%)' : 'transparent',
+                                                color: inputValue.trim() ? 'white !important' : 'inherit',
+                                                transition: 'all 0.2s ease-in-out',
+                                                '&:hover': {
+                                                    background: 'linear-gradient(135deg, #E0006C 0%, #E05300 100%)',
+                                                },
+                                                '&.Mui-disabled': {
+                                                    background: 'transparent',
+                                                }
+                                            }}
+                                        >
+                                            <SendIcon />
+                                        </IconButton>
                                     </InputAdornment>
                                 ) 
                             }}

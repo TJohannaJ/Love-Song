@@ -14,7 +14,6 @@ export const useLikes = () => {
         const fetchProfiles = async () => {
             setLoading(true);
             try {
-                // Központosított service hívás
                 const response = await socialService.getLikes(activeTab);
                 if (isCurrent) setProfiles(response.data);
             } catch (error) {

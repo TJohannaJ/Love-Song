@@ -1,48 +1,53 @@
-﻿using Azure.Core;
-using Backend.Domain.Services;
+﻿using Backend.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Backend.WebApi.Controllers
+namespace Backend.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class SpotifyController : ControllerBase
     {
         private readonly SpotifyService _spotifyService;
+        private readonly ILogger<SpotifyController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public SpotifyController(SpotifyService spotifyService)
+        public SpotifyController(SpotifyService spotifyService, ILogger<SpotifyController> logger, IConfiguration configuration)
         {
             _spotifyService = spotifyService;
+            _logger = logger;
+            _configuration = configuration;
+        }
+
+        [Authorize]
+        [HttpGet("login-url")]
+        public IActionResult GetLoginUrl()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var url = _spotifyService.GetLoginUrl(userId);
+            return Ok(new { url });
         }
 
         [AllowAnonymous]
         [HttpGet("callback")]
         public async Task<IActionResult> Callback([FromQuery] string code, [FromQuery] string state)
         {
-            var userId = state;
-            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
-                return Redirect("https://localhost:5175/profile?spotify=error&reason=missing_data");
+            var success = await _spotifyService.ExchangeCodeForTokensAsync(code, state);
 
-            try
-            {
-                var success = await _spotifyService.ConnectSpotifyAsync(userId, code);
-                if (success)
-                {
-                    return Redirect("https://localhost:5175/profile?spotify=success");
-                }
-                return Redirect("https://localhost:5175/profile?spotify=error&reason=sync_failed");
-            }
-            catch (Exception)
-            {
-                return Redirect("https://localhost:5175/profile?spotify=error&reason=exception");
-            }
+            string script = success
+                ? "<script>window.opener.postMessage('spotify-success', '*'); window.close();</script>"
+                : "<script>window.opener.postMessage('spotify-error', '*'); window.close();</script>";
+
+            return Content(script, "text/html");
         }
 
         [Authorize]
-        [HttpGet("login-url")]
-        public async Task<IActionResult> GetLoginUrl() 
+        [HttpGet("top-tracks")]
+        public async Task<IActionResult> GetTopTracks()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId))
@@ -50,12 +55,13 @@ namespace Backend.WebApi.Controllers
 
             try
             {
-                var loginUrl = await _spotifyService.GetSpotifyLoginUrlAsync(userId);
-                return Ok(new { url = loginUrl });
+                var tracks = await _spotifyService.GetSavedUserTopSongsAsync(userId);
+                return Ok(tracks);
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Nem sikerült generálni a Spotify belépési linket." });
+                _logger.LogError(ex, "Hiba a mentett dalok lekérése során: {UserId}", userId);
+                return StatusCode(500, new { message = "Hiba a mentett dalok lekérése során." });
             }
         }
     }

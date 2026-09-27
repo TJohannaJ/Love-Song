@@ -50,7 +50,7 @@ export default function ClickableProfileCard({ profile, onInteraction, viewType 
 
   return (
     <React.Fragment>
-      <ButtonBase onClick={() => setOpen(true)} sx={{ width: '100%' }}>
+      <ButtonBase onClick={() => setOpen(true)} sx={{ width: '100%', overflow: 'visible' }}>
         {renderSmallProfile()}
       </ButtonBase>
       <Dialog open={open} onClose={() => setOpen(false)} scroll="paper">
