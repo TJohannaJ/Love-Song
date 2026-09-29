@@ -36,21 +36,19 @@ namespace Backend.Infrastructure.Repositories
 
             if (existingPref == null)
             {
-                // Ha még nincs rekord, létrehozzuk tág/biztonságos alapértelmezésekkel
                 existingPref = new DBUserPreference
                 {
                     UserId = userId,
                     MinAge = minAge ?? 18,
                     MaxAge = maxAge ?? 99,
                     Gender = gender ?? "all",
-                    City = city,
+                    City = string.IsNullOrWhiteSpace(city) ? null : city,
                     CommonSongOnly = commonSongOnly ?? false
                 };
                 _db.UserPreferences.Add(existingPref);
             }
             else
             {
-                // Csak azokat módosítjuk, amiket a hívó beküldött
                 if (minAge.HasValue)
                     existingPref.MinAge = minAge.Value;
 
@@ -60,8 +58,9 @@ namespace Backend.Infrastructure.Repositories
                 if (gender != null)
                     existingPref.Gender = gender;
 
+                // Ha üres string érkezik, állítsuk null-ra az adatbázisban
                 if (city != null)
-                    existingPref.City = city;
+                    existingPref.City = string.IsNullOrWhiteSpace(city) ? null : city;
 
                 if (commonSongOnly.HasValue)
                     existingPref.CommonSongOnly = commonSongOnly.Value;

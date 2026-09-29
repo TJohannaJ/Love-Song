@@ -43,10 +43,16 @@ export function PreferenceFilters({ initialPreferences, onApplyFilters }: Prefer
         if (initialPreferences) {
             setAgeRange(initialPreferences.ageRange);
             setGender(initialPreferences.gender);
-            setCity(initialPreferences.city);
+            setCity(initialPreferences.city || '');
             setCommonSongOnly(initialPreferences.commonSongOnly);
         }
-    }, [initialPreferences]);
+    }, [
+        initialPreferences?.ageRange?.[0],
+        initialPreferences?.ageRange?.[1],
+        initialPreferences?.gender,
+        initialPreferences?.city,
+        initialPreferences?.commonSongOnly
+    ]);
 
     const handleResetFilters = () => {
         const defaultState: FilterState = {

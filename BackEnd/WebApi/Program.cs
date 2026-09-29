@@ -4,11 +4,11 @@ using Backend.Infrastructure.DBEntities;
 using Backend.Infrastructure.Persistence;
 using Backend.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using System.Text;
+using Backend.Infrastructure.Services;
+using Resend;
 
 public class Program
 {
@@ -26,7 +26,7 @@ public class Program
             options.AddPolicy("AllowFrontend",
                 policy =>
                 {
-                    policy.WithOrigins("https://localhost:5175", "http://localhost:5175") // Ellenőrizd, hogy a React tényleg ezen fut-e!
+                    policy.WithOrigins("https://localhost:5175", "http://localhost:5175") 
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials(); // Ez kell a SignalR-hez
@@ -35,6 +35,14 @@ public class Program
 
         builder.Services.AddHttpContextAccessor();
        
+        builder.Services.AddOptions();
+        builder.Services.AddHttpClient<IResend, ResendClient>();
+        builder.Services.Configure<ResendClientOptions>(o =>
+        {
+            o.ApiToken = builder.Configuration["Resend:ApiKey"]!;
+        });
+        builder.Services.AddTransient<IEmailService, EmailService>();
+        
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<ILikeRepository, LikeRepository>();
         builder.Services.AddScoped<IDislikeRepository, DislikeRepository>();

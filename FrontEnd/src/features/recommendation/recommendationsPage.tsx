@@ -42,25 +42,27 @@ export function Recommendations() {
 
     // 2. Szűrők alkalmazása és frissített ajánlások lekérése
     const handleApplyFilters = async (filters: FilterState) => {
-    try {
-        const prefDto: UserPreference = {
-            minAge: filters.ageRange[0],
-            maxAge: filters.ageRange[1],
-            gender: filters.gender,
-            city: filters.city,
-            commonSongOnly: filters.commonSongOnly
-        };
+        try {
+            const prefDto: UserPreference = {
+                minAge: filters.ageRange[0],
+                maxAge: filters.ageRange[1],
+                gender: filters.gender,
+                city: filters.city,
+                commonSongOnly: filters.commonSongOnly
+            };
 
-        // Mentjük az új beállításokat az API-n keresztül
-        await socialService.updatePreferences(prefDto);
+            // Mentjük az új beállításokat az API-n keresztül
+            await socialService.updatePreferences(prefDto);
 
-        // Újra lekérjük az ajánlásokat a frissített szűrők alapján
-        await refresh();
-    } catch (error) {
-        console.error("Hiba a preferenciák mentésekor:", error);
-    }
-};
+            // Frissítjük a helyi inicializáló állapotot is!
+            setInitialFilters(filters);
 
+            // Újra lekérjük az ajánlásokat a frissített szűrők alapján
+            await refresh();
+        } catch (error) {
+            console.error("Hiba a preferenciák mentésekor:", error);
+        }
+    };
     if (loading) {
         return (
             <Box display="flex" justifyContent="center" py={5}>
@@ -71,10 +73,11 @@ export function Recommendations() {
 
     return (
         <Box sx={{ flexGrow: 1, p: 2 }}>
-            {/* Szűrő komponens átadott kezdeti adatokkal */}
-            <PreferenceFilters 
-                initialPreferences={initialFilters} 
-                onApplyFilters={handleApplyFilters} 
+            {/* Szűrő komponens átadott kezdeti adatokkal és unique key-vel */}
+            <PreferenceFilters
+                key={initialFilters ? JSON.stringify(initialFilters) : 'default-filters'}
+                initialPreferences={initialFilters}
+                onApplyFilters={handleApplyFilters}
             />
 
             {/* Ajánlott profilok listája */}
