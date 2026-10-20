@@ -1,9 +1,10 @@
 ﻿using Backend.Domain.DTOs;
 using System.Net.Http.Json;
+using Backend.Domain.Interfaces;
 
-namespace Backend.Domain.Services
+namespace Backend.Infrastructure.ExternalApis
 {
-    public class EssentiaService
+    public class EssentiaService : IEssentiaService
     {
         private readonly HttpClient _httpClient;
 

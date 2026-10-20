@@ -51,9 +51,6 @@ namespace Backend.Domain.Services
             }; //[cite: 6]
             await _likeRepo.AddOrUpdateAsync(like); //[cite: 6]
 
-            // =========================================================
-            // 3. EMAILEK KÜLDÉSE - Kizárólag akkor, ha MUTUAL (Match) van!
-            // =========================================================
             if (isMutual)
             {
                 var currentUser = await _userRepo.GetUserById(userId);

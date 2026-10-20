@@ -6,16 +6,16 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace Backend.Domain.Services
+namespace Backend.Infrastructure.ExternalApis
 {
-    public class SpotifyService
+    public class SpotifyService : ISpotifyService
     {
         private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
         private readonly ITokenRepository _tokenRepo;
         private readonly ISongRepository _songRepo;
         private readonly IUserRepository _userRepo;
-        private readonly EssentiaService _essentiaService;
+        private readonly IEssentiaService _essentiaService;
 
         private const string EssentiaApiUrl = "http://localhost:5000/analyze";
 
@@ -25,7 +25,7 @@ namespace Backend.Domain.Services
             ITokenRepository tokenRepository,
             ISongRepository songRepository,
             IUserRepository userRepo,
-            EssentiaService essentiaService)
+            IEssentiaService essentiaService)
         {
             _httpClient = httpClient;
             _configuration = configuration;

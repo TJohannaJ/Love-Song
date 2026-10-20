@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Backend.Domain.Interfaces;
 
 namespace Backend.Controllers
 {
@@ -9,11 +10,11 @@ namespace Backend.Controllers
     [Route("api/[controller]")]
     public class SpotifyController : ControllerBase
     {
-        private readonly SpotifyService _spotifyService;
+        private readonly ISpotifyService _spotifyService;
         private readonly ILogger<SpotifyController> _logger;
         private readonly IConfiguration _configuration;
 
-        public SpotifyController(SpotifyService spotifyService, ILogger<SpotifyController> logger, IConfiguration configuration)
+        public SpotifyController(ISpotifyService spotifyService, ILogger<SpotifyController> logger, IConfiguration configuration)
         {
             _spotifyService = spotifyService;
             _logger = logger;

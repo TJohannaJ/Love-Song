@@ -74,6 +74,8 @@ public class Program
         builder.Services.AddScoped<ITokenRepository, TokenRepository>();
         builder.Services.AddScoped<ISongRepository, SongRepository>();
         builder.Services.AddScoped<IUserPreferenceRepository, UserPreferenceRepository>();
+        builder.Services.AddHttpClient<IEssentiaService, EssentiaService>();
+        builder.Services.AddHttpClient<ISpotifyService, SpotifyService>();
         builder.Services.AddScoped<IBlobService, AzureBlobService>();
 
         builder.Services.AddScoped<MatchService>();
@@ -85,8 +87,6 @@ public class Program
         builder.Services.AddScoped<ChatBotService>();
 
         builder.Services.AddHttpClient();
-        builder.Services.AddHttpClient<EssentiaService>();
-        builder.Services.AddHttpClient<SpotifyService>();
 
         builder.Services.AddSignalR();
 
