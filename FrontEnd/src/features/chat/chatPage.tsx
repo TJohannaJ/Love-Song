@@ -24,16 +24,16 @@ export function ChatPage() {
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2, height: 'calc(100vh - 120px)' }}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2, height: '100%' }}>
             <ChatList matches={matches} selectedId={selectedMatchId} onSelect={setSelectedMatchId} loading={loading} />
 
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-                <Paper sx={{ p: 2, mb: 1 }} elevation={3}>
+                <Paper sx={{ p: 2, mb: 1, backgroundColor: 'background.paper' }} elevation={3}>
                     <Typography variant="h6">{selectedMatch?.fullName || 'Select someone to chat with!'}</Typography>
                 </Paper>
 
                 <Paper sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }} elevation={3}>
-                    <Box ref={scrollRef} sx={{ flex: 1, p: 2, overflowY: 'auto', backgroundColor: '#f5f5f5', display: 'flex', flexDirection: 'column' }}>
+                    <Box ref={scrollRef} sx={{ flex: 1, p: 2, overflowY: 'auto', backgroundColor: 'background.default', display: 'flex', flexDirection: 'column' }}>
                         {(messages[selectedMatchId] || []).map((msg: any, idx: number) => {
                             const isMe = msg.author === 'me';
                             return (
@@ -44,7 +44,7 @@ export function ChatPage() {
                                             px: 2, 
                                             py: 1, 
                                             borderRadius: 3, 
-                                            background: isMe ? 'linear-gradient(135deg, #FF007A 0%, #FF5E00 100%)' : 'white', 
+                                            background: isMe ? 'linear-gradient(135deg, #FF007A 0%, #FF5E00 100%)' : 'background.paper', 
                                             color: isMe ? 'white' : 'text.primary', 
                                             boxShadow: 1 
                                         }}
@@ -56,7 +56,7 @@ export function ChatPage() {
                         })}
                     </Box>
                     <Divider />
-                    <Box sx={{ p: 2, bgcolor: 'white' }}>
+                    <Box sx={{ p: 2, bgcolor: 'background.paper' }}>
                         <TextField 
                             fullWidth value={inputValue} disabled={!selectedMatchId}
                             onChange={(e) => setInputValue(e.currentTarget.value)}

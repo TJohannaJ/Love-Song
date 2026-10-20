@@ -24,7 +24,7 @@ namespace Backend.Infrastructure.DBEntities
         public string City { get; set; }
         public string ShortIntro { get; set; }
         public string LongIntro { get; set; }
-        public byte[] Picture { get; set; }
+        public string? PictureUrl { get; set; }
         [Column(TypeName = "nvarchar(max)")]
         public string? MusicVector { get; set; }
         public virtual ICollection<DBUserTopSong> TopSongs { get; set; } = new List<DBUserTopSong>();

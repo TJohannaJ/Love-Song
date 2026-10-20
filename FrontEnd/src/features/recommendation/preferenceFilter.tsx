@@ -38,7 +38,6 @@ export function PreferenceFilters({ initialPreferences, onApplyFilters }: Prefer
     const [commonSongOnly, setCommonSongOnly] = React.useState<boolean>(false);
     const [city, setCity] = React.useState<string>('');
 
-    // Kezdeti értékek beállítása, ha megérkeznek a backendről
     React.useEffect(() => {
         if (initialPreferences) {
             setAgeRange(initialPreferences.ageRange);
@@ -85,13 +84,15 @@ export function PreferenceFilters({ initialPreferences, onApplyFilters }: Prefer
                 boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
                 '&:before': { display: 'none' },
                 overflow: 'hidden',
-                border: '1px solid #eee'
+                border: '1px solid',
+                borderColor: 'divider',
+                backgroundColor: 'background.paper',
             }}
         >
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon sx={{ color: '#FF007A' }} />}
                 sx={{
-                    backgroundColor: '#fff',
+                    backgroundColor: 'background.paper',
                     px: 3,
                     '& .MuiAccordionSummary-content': { alignItems: 'center', gap: 1 }
                 }}
@@ -102,21 +103,22 @@ export function PreferenceFilters({ initialPreferences, onApplyFilters }: Prefer
                 </Typography>
             </AccordionSummary>
 
-            <AccordionDetails sx={{ p: 3, bgcolor: '#fafafa' }}>
+            <AccordionDetails sx={{ p: 3, bgcolor: 'background.default' }}>
                 <Grid container spacing={3} alignItems="center">
                     {/* Age Slider */}
                     <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                         <Box
                             sx={{
-                                border: '1px solid rgba(0, 0, 0, 0.23)',
+                                border: '1px solid',
+                                borderColor: 'divider',
                                 borderRadius: '10px',
                                 px: 2,
                                 height: 40,
                                 display: 'flex',
                                 alignItems: 'center',
                                 position: 'relative',
-                                bgcolor: '#fff',
-                                '&:hover': { borderColor: 'rgba(0, 0, 0, 0.87)' },
+                                bgcolor: 'background.paper',
+                                '&:hover': { borderColor: 'text.primary' },
                                 '&:focus-within': {
                                     borderColor: '#FF007A',
                                     borderWidth: '2px',
@@ -130,7 +132,7 @@ export function PreferenceFilters({ initialPreferences, onApplyFilters }: Prefer
                                     position: 'absolute',
                                     top: -10,
                                     left: 10,
-                                    bgcolor: '#fafafa',
+                                    bgcolor: 'background.default',
                                     px: 0.5,
                                     color: 'text.secondary',
                                     fontSize: '0.75rem',
@@ -163,7 +165,7 @@ export function PreferenceFilters({ initialPreferences, onApplyFilters }: Prefer
                                 value={gender}
                                 label="Gender"
                                 onChange={(e) => setGender((e.target as HTMLInputElement).value || 'all')}
-                                sx={{ height: 40, bgcolor: '#fff' }}
+                                sx={{ height: 40, bgcolor: 'background.paper' }}
                             >
                                 <MenuItem value="all">Any</MenuItem>
                                 <MenuItem value="female">Female</MenuItem>
@@ -183,7 +185,7 @@ export function PreferenceFilters({ initialPreferences, onApplyFilters }: Prefer
                             value={city}
                             onChange={(e) => setCity(e.currentTarget.value)}
                             sx={{
-                                bgcolor: '#fff',
+                                bgcolor: 'background.paper',
                                 '& .MuiInputBase-root': { height: 40 }
                             }}
                         />
@@ -193,14 +195,15 @@ export function PreferenceFilters({ initialPreferences, onApplyFilters }: Prefer
                     <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                         <Box
                             sx={{
-                                border: '1px solid rgba(0, 0, 0, 0.23)',
+                                border: '1px solid',
+                                borderColor: 'divider',
                                 borderRadius: '10px',
                                 px: 1.5,
                                 height: 40,
                                 display: 'flex',
                                 alignItems: 'center',
-                                bgcolor: '#fff',
-                                '&:hover': { borderColor: 'rgba(0, 0, 0, 0.87)' }
+                                bgcolor: 'background.paper',
+                                '&:hover': { borderColor: 'text.primary' }
                             }}
                         >
                             <FormControlLabel

@@ -4,7 +4,7 @@ export interface User {
     birthdate: string;
     gender: string;
     city: string;
-    picture: string;
+    pictureUrl: string;
     shortIntro: string;
     longIntro: string;
 }

@@ -33,7 +33,7 @@ namespace Backend.Domain.Services
                 BirthDate = model.BirthDate,
                 City = model.City,
                 Gender = model.Gender,
-                Picture = ImageToBinary("../../profile_placeholder.png"),
+                PictureUrl = "https://lovesongpics.blob.core.windows.net/images/profile_placeholder.png",
                 ShortIntro = "Szia! Még nem írtam rövid bemutatkozást.",
                 LongIntro = "Szia! Még nem írtam hosszú bemutatkozást."
             };

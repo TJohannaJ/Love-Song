@@ -16,7 +16,7 @@ namespace Backend.WebApi.Mappers
                 City = user.City,
                 ShortIntro = user.ShortIntro,
                 LongIntro = user.LongIntro,
-                Picture = user.Picture,
+                Picture = user.PictureUrl,
                 CommonSongs = user.CommonSongs.Select(s => new CommonSongDTO
                 {
                     SpotifyTrackId = s.SpotifyTrackId,
@@ -35,7 +35,7 @@ namespace Backend.WebApi.Mappers
                 Id = user.Id,
                 FullName = user.FullName,
                 BirtDate = user.BirthDate,
-                Picture = user.Picture,
+                Picture = user.PictureUrl,
                 City = user.City,
                 Gender = user.Gender,
                 ShortIntro = user.ShortIntro,

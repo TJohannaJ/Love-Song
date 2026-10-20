@@ -47,7 +47,11 @@ export function LikesPage() {
         <Box>
             <LikeTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
-            <Paper elevation={2}>
+            <Paper elevation={2}
+                   sx={{
+                       borderRadius: 3,
+                       overflow: 'hidden'
+                   }}>
                 <List
                     sx={{
                         width: '100%',

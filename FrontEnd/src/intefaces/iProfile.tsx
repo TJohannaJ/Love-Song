@@ -2,7 +2,7 @@ export interface Profile {
     id: string;    
     fullName: string;
     age: number;
-    picture: string;
+    pictureUrl: string;
     city: string;
     gender: string; 
     shortIntro: string;

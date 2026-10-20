@@ -45,7 +45,7 @@ namespace Backend.WebApi.Controllers
                     Id = user.Id,
                     FullName = user.FullName,
                     Age = user.Age,
-                    Picture = user.Picture,
+                    Picture = user.PictureUrl,
                     LastMessage = lastMsg?.Content,
                     LastMessageTime = lastMsg?.CreatedAt.ToString("yyyy-MM-dd HH:mm"),
                     LastMessageSenderName = senderName

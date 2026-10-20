@@ -21,15 +21,15 @@ export function LittleProfile({profile, handleLike, handleDislike}: {profile: Pr
                 }
             }}
         >
-            <CardMedia 
-                component="img" 
-                alt="Profile Picture" 
-                sx={{ 
-                    height: 220, 
-                    width: '100%', 
-                    objectFit: 'cover', // Megtartja a kép arányait és kivágja a felesleget, így nem torzul el
-                }} 
-                image={`data:image/png;base64,${profile.picture}`} 
+            <CardMedia
+                component="img"
+                alt="Profile Picture"
+                sx={{
+                    height: 220,
+                    width: '100%',
+                    objectFit: 'cover',
+                }}
+                image={profile.pictureUrl || '/default-profile.png'} // Base64 prefix eltávolítva
             />
             <CardContent sx={{ flexGrow: 1 }}>
                 <Typography gutterBottom variant="h5" component="div">

@@ -43,8 +43,8 @@ export const ChatList = ({ matches, selectedId, onSelect, loading }: Props) => (
                                 }}
                             >
                                 <ListItemAvatar>
-                                    <Avatar 
-                                        src={`data:image/png;base64,${match.picture}`} 
+                                    <Avatar
+                                        src={match.pictureUrl || '/default-profile.png'} // Base64 prefix eltávolítva
                                         sx={{
                                             ...(isSelected && {
                                                 p: '2px',

@@ -30,7 +30,12 @@ export function DetailedProfile({ profile, handleLike, handleDislike, handleUndo
     return <><DialogTitle id="scroll-dialog-title">{profile.fullName}, {profile.age}</DialogTitle>
         <DialogContent dividers={true}>
             <DialogContentText id="scroll-dialog-description" ref={descriptionElementRef} tabIndex={-1}>
-                <CardMedia component="img" alt="Profile Picture" height="%100" image={`data:image/png;base64,${profile.picture}`} />
+                <CardMedia
+                    component="img"
+                    alt="Profile Picture"
+                    height="100%"
+                    image={profile.pictureUrl || '/default-profile.png'} // Base64 prefix eltávolítva
+                />
                 {profile.longIntro}
             </DialogContentText>
         </DialogContent>

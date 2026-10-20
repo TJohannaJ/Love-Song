@@ -32,13 +32,13 @@ export function NotificationProfile({ profile, handleLike, handleDislike, handle
         }
       }}
     >
-      <ListItemAvatar>
-        <Avatar
-          alt={profile.fullName}
-          src={`data:image/png;base64,${profile.picture}`}
-          sx={{ width: 56, height: 56, mr: 2 }}
-        />
-      </ListItemAvatar>
+        <ListItemAvatar>
+            <Avatar
+                alt={profile.fullName}
+                src={profile.pictureUrl || '/public/profile-placeholder.png'} // Base64 prefix eltávolítva
+                sx={{ width: 56, height: 56, mr: 2 }}
+            />
+        </ListItemAvatar>
 
       <ListItemText
         sx={{ minWidth: 0, flex: 1 }}

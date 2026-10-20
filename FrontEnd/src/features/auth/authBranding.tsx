@@ -1,7 +1,13 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, IconButton, Tooltip } from '@mui/material';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import logo from '../../assets/logo.png';
+import { useColorMode } from '../../utils/colorModeContext';
 
 export function AuthBranding() {
+    const { toggleColorMode, mode } = useColorMode();
+    const isDarkMode = mode === 'dark';
+
     return (
         <Box
             sx={{
@@ -14,6 +20,7 @@ export function AuthBranding() {
                 pt: { xs: 0, md: 0 },
                 pb: { xs: 2, md: 0 },
                 backgroundColor: 'transparent',
+                position: 'relative',
             }}
         >
             {/* Logó és Cím egymás mellett */}
@@ -25,7 +32,6 @@ export function AuthBranding() {
                     mb: 3,
                 }}
             >
-                {/* Csak az ikon kapott lekerekített, gradienses hátteret */}
                 <Box
                     sx={{
                         background: 'linear-gradient(135deg, #FF007A 0%, #FF5E00 100%)',
@@ -50,7 +56,6 @@ export function AuthBranding() {
                     />
                 </Box>
 
-                {/* A név külön, tiszta szövegként */}
                 <Typography
                     variant="h2"
                     sx={{
@@ -81,6 +86,29 @@ export function AuthBranding() {
             >
                 Find your love through your favourite songs!
             </Typography>
+
+            {/* Bal alsó sarokban lévő gomb */}
+            <Tooltip title={isDarkMode ? 'Világos mód' : 'Sötét mód'}>
+                <IconButton
+                    onClick={toggleColorMode}
+                    sx={{
+                        position: 'fixed',
+                        bottom: 20,
+                        left: 20,
+                        backgroundColor: 'background.paper',
+                        color: 'text.primary',
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                        '&:hover': {
+                            backgroundColor: 'background.paper',
+                            boxShadow: '0 6px 16px rgba(0,0,0,0.15)',
+                        },
+                    }}
+                >
+                    {isDarkMode ? <LightModeOutlinedIcon fontSize="small" /> : <DarkModeOutlinedIcon fontSize="small" />}
+                </IconButton>
+            </Tooltip>
         </Box>
     );
 }

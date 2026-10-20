@@ -1,7 +1,7 @@
 using Backend.Domain.Interfaces;
 using Resend;
 
-namespace Backend.Infrastructure.Services
+namespace Backend.Infrastructure.ExternalApis
 {
     public class EmailService : IEmailService
     {

@@ -170,14 +170,24 @@ namespace Backend.Infrastructure.Repositories
             return MapToDomain(currentUser);
         }
 
-        public async Task UpdateProfile(string userId, UserDTO model)
+        public async Task UpdateProfile(string userId, UserDTO model, string? uploadedImageUrl = null)
         {
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null) throw new Exception("User not found");
+
             if (!string.IsNullOrEmpty(model.FullName))
                 user.FullName = model.FullName;
-            if (model.Picture != null && model.Picture.Length > 0)
-                user.Picture = model.Picture;
+    
+            // JAVÍTÁS: Ha a DTO-ban (model.PictureUrl) érkezik a közvetlen Azure URL, elmentjük azt is!
+            if (!string.IsNullOrEmpty(model.Picture))
+            {
+                user.PictureUrl = model.Picture;
+            }
+            else if (!string.IsNullOrEmpty(uploadedImageUrl))
+            {
+                user.PictureUrl = uploadedImageUrl;
+            }
+
             if (!string.IsNullOrEmpty(model.City))
                 user.City = model.City;
             if (!string.IsNullOrEmpty(model.Gender))
@@ -188,7 +198,7 @@ namespace Backend.Infrastructure.Repositories
                 user.LongIntro = model.LongIntro;
 
             _db.Users.Update(user);
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync(); // Most már az új Azure URL mentődik el az adatbázisba!
         }
 
         public async Task UpdateMusicVectorAsync(string userId, string musicVector)
@@ -228,7 +238,7 @@ namespace Backend.Infrastructure.Repositories
                 BirthDate = user.BirthDate,
                 City = user.City,
                 Gender = user.Gender,
-                Picture = user.Picture,
+                PictureUrl = user.PictureUrl,
                 ShortIntro = user.ShortIntro,
                 LongIntro = user.LongIntro,
                 SpotifyToken = spotifyToken
@@ -305,7 +315,7 @@ namespace Backend.Infrastructure.Repositories
             dbUser.Gender = user.Gender;
             dbUser.ShortIntro = user.ShortIntro;
             dbUser.LongIntro = user.LongIntro;
-            dbUser.Picture = user.Picture;
+            dbUser.PictureUrl = user.PictureUrl;
 
             return await _userManager.UpdateAsync(dbUser);
         }
@@ -322,7 +332,7 @@ namespace Backend.Infrastructure.Repositories
                 dbUser.Age,
                 dbUser.Gender,
                 dbUser.City,
-                dbUser.Picture,
+                dbUser.PictureUrl,
                 dbUser.ShortIntro,
                 dbUser.LongIntro)
             {

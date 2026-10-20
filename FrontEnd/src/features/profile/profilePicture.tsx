@@ -1,20 +1,20 @@
 import { Box, CardMedia, Button } from "@mui/material";
 
 interface Props {
-    picture: string | undefined;
+    pictureUrl: string | undefined; // picture helyett pictureUrl
     onPictureChange: (e: any) => void;
 }
 
-export const ProfilePicture = ({ picture, onPictureChange }: Props) => (
+export const ProfilePicture = ({ pictureUrl, onPictureChange }: Props) => (
     <Box width="100%" display="flex" flexDirection="column" alignItems="center" gap={2} sx={{ border: '1px solid #ccc', padding: 2 }}>
-        <CardMedia 
-            component="img" 
-            alt="Profile Picture" 
-            image={picture ? `data:image/png;base64,${picture}` : '/default-profile.png'} 
+        <CardMedia
+            component="img"
+            alt="Profile Picture"
+            image={pictureUrl || '/public/profile-placeholder.png'} // Közvetlenül a Blob URL használata
             sx={{ width: 300, height: 300, objectFit: 'cover' }}
         />
-        <Button 
-            component="label" 
+        <Button
+            component="label"
             sx={{
                 borderRadius: '20px',
                 px: 3,
@@ -33,8 +33,8 @@ export const ProfilePicture = ({ picture, onPictureChange }: Props) => (
                 },
             }}
         >
-            Kép feltöltése
-            <input type="file" hidden accept="image/png" onChange={onPictureChange} />
+            Uploading picture
+            <input type="file" hidden accept="image/png, image/jpeg, image/webp" onChange={onPictureChange} />
         </Button>
     </Box>
 );
