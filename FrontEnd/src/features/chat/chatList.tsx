@@ -27,6 +27,7 @@ export const ChatList = ({ matches, selectedId, onSelect, loading }: Props) => (
             ) : (
                 matches.map((match) => {
                     const isSelected = match.id === selectedId;
+                    // @ts-ignore
                     return (
                         <ListItem key={match.id} disablePadding>
                             <ListItemButton 
@@ -44,7 +45,7 @@ export const ChatList = ({ matches, selectedId, onSelect, loading }: Props) => (
                             >
                                 <ListItemAvatar>
                                     <Avatar
-                                        src={match.pictureUrl || '/default-profile.png'} // Base64 prefix eltávolítva
+                                        src={match.picture || '/default-profile.png'} // Base64 prefix eltávolítva
                                         sx={{
                                             ...(isSelected && {
                                                 p: '2px',
@@ -55,11 +56,9 @@ export const ChatList = ({ matches, selectedId, onSelect, loading }: Props) => (
                                 </ListItemAvatar>
                                 <ListItemText
                                     primary={match.fullName}
-                                    secondary={match.lastMessage ? `${match.lastMessageSenderName}: ${match.lastMessage}` : "Start chatting!"}
-                                    slotProps={{
-                                        primary: {
-                                            fontWeight: isSelected ? 600 : 400,
-                                        }
+                                    secondary={match.lastMessage ? `${match.lastMessageSenderName}: ${match.lastMessage}` : ''}
+                                    primaryTypographyProps={{
+                                        fontWeight: 500 // Ide írd a kívánt számértéket
                                     }}
                                 />
                             </ListItemButton>

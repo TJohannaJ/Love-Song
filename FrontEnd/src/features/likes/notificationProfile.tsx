@@ -35,7 +35,7 @@ export function NotificationProfile({ profile, handleLike, handleDislike, handle
         <ListItemAvatar>
             <Avatar
                 alt={profile.fullName}
-                src={profile.pictureUrl || '/public/profile-placeholder.png'} // Base64 prefix eltávolítva
+                src={profile.picture || '/public/profile-placeholder.png'} // Base64 prefix eltávolítva
                 sx={{ width: 56, height: 56, mr: 2 }}
             />
         </ListItemAvatar>

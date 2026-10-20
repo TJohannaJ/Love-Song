@@ -29,7 +29,7 @@ export function LittleProfile({profile, handleLike, handleDislike}: {profile: Pr
                     width: '100%',
                     objectFit: 'cover',
                 }}
-                image={profile.pictureUrl || '/default-profile.png'} // Base64 prefix eltávolítva
+                image={profile.picture || '/default-profile.png'} // Base64 prefix eltávolítva
             />
             <CardContent sx={{ flexGrow: 1 }}>
                 <Typography gutterBottom variant="h5" component="div">

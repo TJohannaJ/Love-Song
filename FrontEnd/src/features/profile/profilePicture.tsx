@@ -1,16 +1,16 @@
 import { Box, CardMedia, Button } from "@mui/material";
 
 interface Props {
-    pictureUrl: string | undefined; // picture helyett pictureUrl
+    picture: string | undefined; 
     onPictureChange: (e: any) => void;
 }
 
-export const ProfilePicture = ({ pictureUrl, onPictureChange }: Props) => (
+export const ProfilePicture = ({ picture, onPictureChange }: Props) => (
     <Box width="100%" display="flex" flexDirection="column" alignItems="center" gap={2} sx={{ border: '1px solid #ccc', padding: 2 }}>
         <CardMedia
             component="img"
             alt="Profile Picture"
-            image={pictureUrl || '/public/profile-placeholder.png'} // Közvetlenül a Blob URL használata
+            image={picture || '/public/profile-placeholder.png'} // Közvetlenül a Blob URL használata
             sx={{ width: 300, height: 300, objectFit: 'cover' }}
         />
         <Button

@@ -34,7 +34,7 @@ export function DetailedProfile({ profile, handleLike, handleDislike, handleUndo
                     component="img"
                     alt="Profile Picture"
                     height="100%"
-                    image={profile.pictureUrl || '/default-profile.png'} // Base64 prefix eltávolítva
+                    image={profile.picture || '/default-profile.png'} // Base64 prefix eltávolítva
                 />
                 {profile.longIntro}
             </DialogContentText>

@@ -84,7 +84,7 @@ export function ProfilePage() {
                         <Box width="100%">
                             <SpotifyButton onClick={handleLink} loading={isRedirecting} />
                         </Box>
-                        <ProfilePicture pictureUrl={profile?.pictureUrl} onPictureChange={handlePictureChange} />
+                        <ProfilePicture picture={profile?.picture} onPictureChange={handlePictureChange} />
 
                         <Box width={{ xs: '100%', sm: 'calc(50% - 12px)' }}>
                             <TextField fullWidth label="Full Name" name="fullName" value={profile?.fullName || ''} onChange={handleChange} />

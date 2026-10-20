@@ -56,7 +56,7 @@ export const useProfile = () => {
             }
 
             // 4. A felületen a végleges Azure képlinket állítjuk be
-            setProfile(prev => prev ? { ...prev, pictureUrl: data.blobUrl } : null);
+            setProfile(prev => prev ? { ...prev, picture: data.blobUrl } : null);
             alert("A kép sikeresen feltöltve!");
 
         } catch (error) {
