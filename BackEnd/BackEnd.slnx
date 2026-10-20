@@ -8,4 +8,5 @@
   <Folder Name="/WebApi/">
     <Project Path="WebApi/Backend.WebApi.csproj" />
   </Folder>
+  <Project Path="Backend.Domain.Tests/Backend.Domain.Tests.csproj" />
 </Solution>
