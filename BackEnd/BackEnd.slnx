@@ -9,4 +9,5 @@
     <Project Path="WebApi/Backend.WebApi.csproj" />
   </Folder>
   <Project Path="Backend.Domain.Tests/Backend.Domain.Tests.csproj" />
+  <Project Path="Backend.IntegrationTests/Backend.IntegrationTests.csproj" />
 </Solution>
