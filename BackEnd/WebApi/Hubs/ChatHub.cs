@@ -1,7 +1,9 @@
 ﻿using Backend.Domain.DTOs;
 using Backend.Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
+[Authorize]
 public class ChatHub : Hub
 {
     private readonly ChatService _chatService;
@@ -28,7 +30,7 @@ public class ChatHub : Hub
 
             await Clients.Caller.SendAsync("MessageSent", savedMessage);
         }
-        catch (UnauthorizedAccessException ex)
+        catch (Exception ex)
         {
             await Clients.Caller.SendAsync("Error", ex.Message);
         }

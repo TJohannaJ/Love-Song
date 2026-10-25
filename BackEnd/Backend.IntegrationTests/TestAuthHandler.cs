@@ -13,6 +13,12 @@ namespace Backend.IntegrationTests
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
+            // Ha nincs Authorization fejléc a kérésben, akkor nem hitelesítünk (ez adja majd a 401-et)
+            if (!Request.Headers.ContainsKey("Authorization"))
+            {
+                return Task.FromResult(AuthenticateResult.NoResult());
+            }
+
             var claims = new[] { new Claim(ClaimTypes.NameIdentifier, "test-user-id") };
             var identity = new ClaimsIdentity(claims, "Test");
             var principal = new ClaimsPrincipal(identity);

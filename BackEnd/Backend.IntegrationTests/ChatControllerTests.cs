@@ -48,7 +48,7 @@ namespace Backend.IntegrationTests.Controllers
         {
             using var unauthClient = _factory.CreateClient();
             
-            var response = await _client.GetAsync("/chat/conversation/other-user-id");
+            var response = await unauthClient.GetAsync("/chat/conversation/other-user-id");
             
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }

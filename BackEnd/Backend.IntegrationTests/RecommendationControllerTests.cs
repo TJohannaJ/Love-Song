@@ -84,7 +84,7 @@ namespace Backend.IntegrationTests.Controllers
         {
             using var unauthClient = _factory.CreateClient();
             
-            var response = await _client.GetAsync("/recommendation");
+            var response = await unauthClient.GetAsync("/recommendation");
             
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
