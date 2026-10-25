@@ -363,3 +363,7 @@ MigrationBackup/
 FodyWeavers.xsd
 BackEnd/WebApi/appsettings.json
 BackEnd/WebApi/appsettings.json
+*.sh
+BackEnd/.idea/.idea.BackEnd/.idea/vcs.xml
+BackEnd/.idea/.idea.BackEnd/.idea/jsonSchemas.xml
+BackEnd/.idea/.idea.BackEnd/.idea/dataSources.xml
